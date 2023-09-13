@@ -4,6 +4,10 @@
 
 package frc.robot.subsystems.swerve;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -244,4 +248,34 @@ public class DriveSubsystem extends SubsystemBase {
   public double getTurnRate() {
     return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
+  
+  public void writeEncoderPositionsToFile(String filename) {
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+      // Write the encoder positions for each module
+      writer.write("Front Left Drive Encoder Position: " + m_frontLeft.getDriveEncoderPosition());
+      writer.newLine();
+      writer.write("Front Left Turning Encoder Position: " + m_frontLeft.getTurningEncoderPosition());
+      writer.newLine();
+      writer.write("Front Right Drive Encoder Position: " + m_frontRight.getDriveEncoderPosition());
+      writer.newLine();
+      writer.write("Front Right Turning Encoder Position: " + m_frontRight.getTurningEncoderPosition());
+      writer.newLine();
+      writer.write("Rear Left Drive Encoder Position: " + m_rearLeft.getDriveEncoderPosition());
+      writer.newLine();
+      writer.write("Rear Left Turning Encoder Position: " + m_rearLeft.getTurningEncoderPosition());
+      writer.newLine();
+      writer.write("Rear Right Drive Encoder Position: " + m_rearRight.getDriveEncoderPosition());
+      writer.newLine();
+      writer.write("Rear Right Turning Encoder Position: " + m_rearRight.getTurningEncoderPosition());
+      writer.newLine();
+
+      // Flush and close the writer
+      writer.flush();
+      writer.close();
+
+      System.out.println("Encoder positions written to file: " + filename);
+    } catch (IOException e) {
+      System.err.println("Error writing encoder positions to file: " + e.getMessage());
+    }
+ }
 }

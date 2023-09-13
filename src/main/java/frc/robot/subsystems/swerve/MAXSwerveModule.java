@@ -4,17 +4,16 @@
 
 package frc.robot.subsystems.swerve;
 
+import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
+import com.revrobotics.SparkMaxPIDController;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
-import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.AbsoluteEncoder;
-import com.revrobotics.RelativeEncoder;
-
 import frc.robot.Constants.ModuleConstants;
 
 public class MAXSwerveModule {
@@ -161,4 +160,23 @@ public class MAXSwerveModule {
   public void resetEncoders() {
     m_drivingEncoder.setPosition(0);
   }
+
+  /**
+ * Moves the module to what it thinks is the position (0, 0).
+ */
+  public void moveToZero() {
+    // Set the desired state to have zero speed and angle.
+    SwerveModuleState zeroState = new SwerveModuleState(0.0, new Rotation2d());
+
+    setDesiredState(zeroState);
+  }
+
+  public double getDriveEncoderPosition() {
+    return m_drivingEncoder.getPosition();
+  }
+  
+  public double getTurningEncoderPosition() {
+    return m_turningEncoder.getPosition();
+  }
+
 }
