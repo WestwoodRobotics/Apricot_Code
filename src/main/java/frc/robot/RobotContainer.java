@@ -15,11 +15,11 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.OIConstants;
-import frc.robot.commands.swerve.DriveConstantControlCommand;
+import frc.robot.Constants.*;
+import frc.robot.commands.swerve.*;
+import frc.robot.commands.transport.*;
 import frc.robot.subsystems.swerve.DriveSubsystem;
+import frc.robot.subsystems.transport.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -33,11 +33,16 @@ import java.util.List;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+
+  private final JoystickButton rightBumper = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
+  private final JoystickButton leftBumper = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
+  // The robot's subsystems
+  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
+  private final IntakeSubsystem m_intake = new IntakeSubsystem();
+
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -48,6 +53,8 @@ public class RobotContainer {
 
     // Configure default commands
     m_robotDrive.setDefaultCommand(new DriveConstantControlCommand(m_robotDrive, m_driverController));
+    m_elevator.setDefaultCommand(new MoveElevator(m_elevator, (m_driverController.getRightTriggerAxis()- m_driverController.getLeftTriggerAxis())));
+    m_intake.setDefaultCommand(new RunIntake(m_intake, 0));
   }
 
   /**
@@ -64,6 +71,9 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
+
+    leftBumper.onTrue(new RunIntake(m_intake, -0.5));
+    rightBumper.onTrue(new RunIntake(m_intake, 0.5));
   }
 
   /**
