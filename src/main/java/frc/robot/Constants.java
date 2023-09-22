@@ -68,9 +68,11 @@ public final class Constants {
         public static final int kRearLeftTurningCanId = 12;
         public static final int kFrontRightTurningCanId = 14;
         public static final int kRearRightTurningCanId = 16;
-
-        public static final int kElevatorMotorPort = 20;
-        public static final int kIntakeMotorPort = 21;
+        
+        //TODO: Need to update when Motors are connected to Apricot
+        public static final int kElevatorMotor1Port = 20; 
+        public static final int kElevatorMotor2Port = 21;
+        public static final int kIntakeMotorPort = 22;
   }
 
   public static final class TransportConstants{

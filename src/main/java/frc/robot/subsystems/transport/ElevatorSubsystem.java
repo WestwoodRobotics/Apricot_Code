@@ -7,30 +7,36 @@ import com.revrobotics.SparkMaxPIDController.ArbFFUnits;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.PortConstants;
-import frc.robot.Constants.TransportConstants;
+import frc.robot.Constants.*;
+import frc.robot.subsystems.MotorControlGroup;
 
 public class ElevatorSubsystem extends SubsystemBase {
 
-  private final CANSparkMax elevatorMotor;
+  private final CANSparkMax elevatorMotor1;
+  private final CANSparkMax elevatorMotor2;
+  private final MotorControlGroup elevatorMotors;
 
 
-  // Constructor for initializing the intake module
+  // Constructor for initializing the Elevator Subsystem
   public ElevatorSubsystem() {
-    elevatorMotor = new CANSparkMax(PortConstants.kElevatorMotorPort, MotorType.kBrushless);
-    elevatorMotor.setInverted(false);
+    elevatorMotor1 = new CANSparkMax(PortConstants.kElevatorMotor1Port, MotorType.kBrushless);
+    elevatorMotor2 = new CANSparkMax(PortConstants.kElevatorMotor2Port, MotorType.kBrushless);
+
+    elevatorMotors = new MotorControlGroup(elevatorMotor1, elevatorMotor2);
+
+    elevatorMotors.setInverted(false);
   }
 
   public void setElevatorPower(double power) {
-    elevatorMotor.set(power);
+    elevatorMotors.setPower(power);
   }
 
   public void setElevatorPosition(double position, float ff) {
-    elevatorMotor.getPIDController().setReference(position, ControlType.kPosition, 0, ff, ArbFFUnits.kPercentOut);
+    elevatorMotors.setPosition(position, ff);
   }
 
   public double getElevatorPosition(){
-    return elevatorMotor.getEncoder().getPosition();
+    return elevatorMotors.getPosition();
   }
 
 }
