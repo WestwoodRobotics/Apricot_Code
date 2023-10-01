@@ -1,10 +1,12 @@
+
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
 
-import edu.wpi.first.math.MathUtil;
+import java.util.List;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -13,18 +15,23 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.OIConstants;
-import frc.robot.commands.swerve.DriveConstantControlCommand;
-import frc.robot.subsystems.swerve.DriveSubsystem;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import java.util.List;
+import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.OIConstants;
+import frc.robot.Intake.ArmCommand;
+import frc.robot.Intake.IntakeCommand;
+import frc.robot.commands.swerve.driveCommand;
+import frc.robot.elevator.ElevatorCommand;
+import frc.robot.subsystems.ArmModule;
+import frc.robot.subsystems.ElevatorModule;
+import frc.robot.subsystems.IntakeModule;
+import frc.robot.subsystems.swerve.DriveSubsystem;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -35,6 +42,11 @@ import java.util.List;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  // if this breaks, just delete it, I have no idea what I'm doing
+  private final IntakeModule m_intakeModule = new IntakeModule();
+  private final ElevatorModule m_elevatorModule = new ElevatorModule();
+  private final ArmModule m_armModule = new ArmModule();
+  
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -47,7 +59,11 @@ public class RobotContainer {
     configureButtonBindings();
 
     // Configure default commands
-    m_robotDrive.setDefaultCommand(new DriveConstantControlCommand(m_robotDrive, m_driverController));
+    m_robotDrive.setDefaultCommand(new driveCommand(m_robotDrive, m_driverController));
+    m_intakeModule.setDefaultCommand(new IntakeCommand(m_intakeModule, m_driverController));
+    m_elevatorModule.setDefaultCommand(new ElevatorCommand(m_elevatorModule, m_driverController));
+    m_armModule.setDefaultCommand(new ArmCommand(m_armModule, m_driverController));
+
   }
 
   /**
@@ -64,6 +80,7 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
+    
   }
 
   /**

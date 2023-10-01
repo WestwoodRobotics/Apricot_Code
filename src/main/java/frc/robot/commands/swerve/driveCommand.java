@@ -11,17 +11,18 @@ import frc.robot.subsystems.swerve.DriveSpeed;
 import static frc.robot.Constants.DriveConstants.kMaxAngularSpeed;
 import static frc.robot.Constants.DriveConstants.kMaxSpeedMetersPerSecond;
 
-public class DriveConstantControlCommand extends CommandBase {
+public class driveCommand extends CommandBase {
 
   private final DriveSubsystem m_swerveDrive;
   private final DriveSpeed limJoystickLeft = new DriveSpeed(0.05);
   private final DriveSpeed limJoystickRight = new DriveSpeed(0.05);
   private XboxController controller;
   private boolean slowMode;
+  private boolean YuMode;
   private final double  maxSpeed = kMaxSpeedMetersPerSecond;
   private final double  maxAngularSpeed = kMaxAngularSpeed;
 
-  public DriveConstantControlCommand(DriveSubsystem swerveDrive, XboxController controller) {
+  public driveCommand(DriveSubsystem swerveDrive, XboxController controller) {
     m_swerveDrive = swerveDrive;
     this.controller = controller;
     addRequirements(swerveDrive);
@@ -32,20 +33,28 @@ public class DriveConstantControlCommand extends CommandBase {
   public void initialize() 
   {
     slowMode = false;
+    YuMode = false; 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double leftX, leftY, rightX;
+    double leftX, leftY, rightX, rightY;
     if (controller.getBackButtonPressed())
     {
       slowMode = !slowMode;
     }
+    if (controller.getStartButton())
+    {
+      YuMode= !YuMode;
+    }
+
+
 
     leftX = -MathUtil.applyDeadband(controller.getLeftX(), OIConstants.kDriveDeadband);
     leftY = -MathUtil.applyDeadband(controller.getLeftY(), OIConstants.kDriveDeadband);
     rightX = -MathUtil.applyDeadband(controller.getRightX(), OIConstants.kDriveDeadband);
+    rightY = -MathUtil.applyDeadband(controller.getRightY(), OIConstants.kDriveDeadband);
 
 
     // Find radii for controller dead-zones (circular)
@@ -58,7 +67,13 @@ public class DriveConstantControlCommand extends CommandBase {
       leftY *= Constants.DriveConstants.slowModeMultiplier;
       rightX *= Constants.DriveConstants.slowModeMultiplier;
     }
-    m_swerveDrive.drive(leftX, leftY, rightX, true, true);
+    if (YuMode){
+      m_swerveDrive.drive(rightY, rightX, leftX, true, true);
+    }
+    else{
+      m_swerveDrive.drive(leftY, leftX, rightX, true, true);
+    }
+
   }
 
 
