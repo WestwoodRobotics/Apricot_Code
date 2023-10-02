@@ -18,19 +18,21 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.Intake.ArmCommand;
-import frc.robot.Intake.IntakeCommand;
+import frc.robot.commands.Intake.IntakeCommand;
+import frc.robot.commands.arm.ArmCommand;
+import frc.robot.commands.elevator.ElevatorCommand;
 import frc.robot.commands.swerve.driveCommand;
-import frc.robot.elevator.ElevatorCommand;
-import frc.robot.subsystems.ArmModule;
-import frc.robot.subsystems.ElevatorModule;
-import frc.robot.subsystems.IntakeModule;
+import frc.robot.subsystems.arm.ArmModule;
+import frc.robot.subsystems.elevator.ElevatorModule;
+import frc.robot.subsystems.intake.IntakeModule;
 import frc.robot.subsystems.swerve.DriveSubsystem;
 
 /*
@@ -50,6 +52,11 @@ public class RobotContainer {
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+
+  private final POVButton dPadUp = new POVButton(m_driverController, 0);
+  private final POVButton dPadRight = new POVButton(m_driverController, 90);
+  private final POVButton dPadDown = new POVButton(m_driverController, 180);
+  private final POVButton dPadLeft = new POVButton(m_driverController, 270);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -76,10 +83,20 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
+
     new JoystickButton(m_driverController, Button.kR1.value) // if R1 is pressed wheels should go into x formation
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
+
+
+    dPadUp.whileTrue(new InstantCommand(() -> m_elevatorModule.setElevatorPower(-0.25)));
+    dPadDown.whileTrue(new InstantCommand(() -> m_elevatorModule.setElevatorPower(0.25)));
+
+    dPadLeft.whileTrue(new InstantCommand(() -> m_intakeModule.setIntakePower(-0.25)));
+    dPadRight.whileTrue(new InstantCommand(() -> m_intakeModule.setIntakePower(0.25)));
+
+    
     
   }
 

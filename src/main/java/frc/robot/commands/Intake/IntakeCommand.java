@@ -1,11 +1,11 @@
-package frc.robot.Intake;
+package frc.robot.commands.Intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.subsystems.IntakeModule;
+import frc.robot.subsystems.intake.IntakeModule;
 
 public class IntakeCommand extends CommandBase {
     // useful variables

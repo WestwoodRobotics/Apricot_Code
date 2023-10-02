@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.elevator;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -33,5 +33,16 @@ public class ElevatorModule extends SubsystemBase{
         elevatorEncoder.setPosition(0);
     }
 
+    public void setElevatorTicks(double ticks) {
+       if(ticks > this.getEncoderPosition()){
+            elevatorMotor.set(0.25);
+       } 
+       else if (ticks < this.getEncoderPosition()){
+            elevatorMotor.set(-0.25);
+       } 
+       else {
+            elevatorMotor.set(0);
+       }
+    }
 
 }
