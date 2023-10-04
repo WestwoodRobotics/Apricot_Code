@@ -14,12 +14,15 @@ import frc.robot.subsystems.elevator.ElevatorModule;
 public class ElevatorCommand extends CommandBase {
   
   private XboxController controller;
+  private XboxController controller2;
   private ElevatorModule elevatorModule;
+
   private final POVButton dPadUp = new POVButton(controller, 0);
   private final POVButton dPadDown = new POVButton(controller, 180);
 
-  public ElevatorCommand(ElevatorModule elevatorModule, XboxController controller) {
+  public ElevatorCommand(ElevatorModule elevatorModule, XboxController controller, XboxController controller2) {
     this.controller = controller;
+    this.controller2 = controller2;
     this.elevatorModule = elevatorModule;
     addRequirements(elevatorModule);
   }
@@ -34,6 +37,10 @@ public class ElevatorCommand extends CommandBase {
   public void execute() {
     dPadUp.whileTrue(new InstantCommand(() -> elevatorModule.setElevatorPower(0.25)));
     dPadDown.whileTrue(new InstantCommand(() -> elevatorModule.setElevatorPower(-0.25)));
+    
+    if ((controller2.getRawAxis(0) > 0.1) || (controller2.getRawAxis(1) < -0.1)) {//TODO: Make sure Axus Number is Correct
+      elevatorModule.setElevatorPower(controller.getRawAxis(0));
+    }
   }
 
   // Called once the command ends or is interrupted.

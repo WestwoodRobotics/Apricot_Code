@@ -28,7 +28,9 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.Intake.IntakeCommand;
 import frc.robot.commands.arm.ArmCommand;
+import frc.robot.commands.arm.ArmPosSet;
 import frc.robot.commands.elevator.ElevatorCommand;
+import frc.robot.commands.elevator.ElevatorPosSet;
 import frc.robot.commands.swerve.driveCommand;
 import frc.robot.subsystems.arm.ArmModule;
 import frc.robot.subsystems.elevator.ElevatorModule;
@@ -53,10 +55,25 @@ public class RobotContainer {
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 
+  private final JoystickButton yButton = new JoystickButton(m_driverController, XboxController.Button.kY.value);
+  private final JoystickButton aButton = new JoystickButton(m_driverController, XboxController.Button.kA.value);
+  private final JoystickButton bButton = new JoystickButton(m_driverController, XboxController.Button.kB.value);
+  private final JoystickButton xButton = new JoystickButton(m_driverController, XboxController.Button.kX.value);
+
   private final POVButton dPadUp = new POVButton(m_driverController, 0);
   private final POVButton dPadRight = new POVButton(m_driverController, 90);
   private final POVButton dPadDown = new POVButton(m_driverController, 180);
   private final POVButton dPadLeft = new POVButton(m_driverController, 270);
+
+  private final JoystickButton rightBumper = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
+  private final JoystickButton leftBumper = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
+
+  XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
+  private final JoystickButton y2Button = new JoystickButton(m_operatorController, XboxController.Button.kY.value);
+  private final JoystickButton a2Button = new JoystickButton(m_operatorController, XboxController.Button.kA.value);
+  private final JoystickButton b2Button = new JoystickButton(m_operatorController, XboxController.Button.kB.value);
+  private final JoystickButton x2Button = new JoystickButton(m_operatorController, XboxController.Button.kX.value);
+
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -67,8 +84,8 @@ public class RobotContainer {
 
     // Configure default commands
     m_robotDrive.setDefaultCommand(new driveCommand(m_robotDrive, m_driverController));
-    m_intakeModule.setDefaultCommand(new IntakeCommand(m_intakeModule, m_driverController));
-    m_elevatorModule.setDefaultCommand(new ElevatorCommand(m_elevatorModule, m_driverController));
+    m_intakeModule.setDefaultCommand(new IntakeCommand(m_intakeModule, m_driverController, m_operatorController));
+    m_elevatorModule.setDefaultCommand(new ElevatorCommand(m_elevatorModule, m_driverController, m_operatorController));
     m_armModule.setDefaultCommand(new ArmCommand(m_armModule, m_driverController));
 
   }
@@ -92,9 +109,26 @@ public class RobotContainer {
 
     dPadUp.whileTrue(new InstantCommand(() -> m_elevatorModule.setElevatorPower(-0.25)));
     dPadDown.whileTrue(new InstantCommand(() -> m_elevatorModule.setElevatorPower(0.25)));
-
     dPadLeft.whileTrue(new InstantCommand(() -> m_intakeModule.setIntakePower(-0.25)));
     dPadRight.whileTrue(new InstantCommand(() -> m_intakeModule.setIntakePower(0.25)));
+
+    leftBumper.onTrue(new ElevatorPosSet(m_elevatorModule, "cube_pickup")
+              .andThen(new ArmPosSet(m_armModule, "cube_pickup")));
+    rightBumper.onTrue(new ElevatorPosSet(m_elevatorModule, "cone_pickup")
+              .andThen(new ArmPosSet(m_armModule, "cone_pickup")));
+
+    aButton.onTrue(new ElevatorPosSet(m_elevatorModule, "home/low_cube")
+              .andThen(new ArmPosSet(m_armModule, "home/low_cube")));
+    yButton.onTrue(new ElevatorPosSet(m_elevatorModule, "cone_high/cube_mid")
+              .andThen(new ArmPosSet(m_armModule, "cone_high/cube_mid")));
+    bButton.onTrue(new ElevatorPosSet(m_elevatorModule, "cone_mid")
+              .andThen(new ArmPosSet(m_armModule, "cone_mid")));
+    xButton.onTrue(new ElevatorPosSet(m_elevatorModule, "cube_high")
+              .andThen(new ArmPosSet(m_armModule, "cube_high")));
+
+
+    a2Button.onTrue(new ElevatorPosSet(m_elevatorModule, "home/low_cube")
+              .andThen(new ArmPosSet(m_armModule, "home/low_cube")));  
 
     
     

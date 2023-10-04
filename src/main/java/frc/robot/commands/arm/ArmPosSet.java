@@ -12,8 +12,12 @@ public class ArmPosSet extends CommandBase {
   private ArmModule armModule;
   private String position = new String();
 
-  private double coneTicks = 0;
-  private double cubeTicks = 0;
+  private double cone_pickup_ticks = 100;
+  private double cube_pickup_ticks = 70;
+  private double homeTicks = 0;
+  private double mid_cone_ticks = 0;
+  private double high_cube_ticks = 0;
+  private double high_cone_ticks = 0;
 
   public ArmPosSet(ArmModule armModule, String position) {
     this.armModule = armModule;
@@ -31,14 +35,27 @@ public class ArmPosSet extends CommandBase {
   @Override
   public void execute() {
 
-    if (position == ("cone")){
-        armModule.setArmTicks(coneTicks);
-    }
-
-    else if(position == ("cube")){
-        armModule.setArmTicks(cubeTicks);
-    }
-    
+    if (position == ("home/low_cube")){
+      armModule.setArmTicks(homeTicks);
+  }
+  else if(position == ("cone_mid")){
+      armModule.setArmTicks(mid_cone_ticks);
+  }
+  else if(position == ("cube_high")){
+      armModule.setArmTicks(high_cube_ticks);
+  }
+  else if (position == ("cone_high/cube_mid")){
+      armModule.setArmTicks(high_cone_ticks);
+  }
+  else if (position == ("cube_pickup")){
+      armModule.setArmTicks(cube_pickup_ticks);
+  }
+  else if (position == ("cone_pickup")){
+      armModule.setArmTicks(cone_pickup_ticks);
+  }
+  else{
+      armModule.setArmPower(0);
+  }
 
   }
 

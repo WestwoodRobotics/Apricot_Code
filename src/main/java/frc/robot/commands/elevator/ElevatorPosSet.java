@@ -18,6 +18,8 @@ public class ElevatorPosSet extends CommandBase {
   private double mid_cone_ticks = 0;
   private double high_cube_ticks = 0;
   private double high_cone_ticks = 0;
+  private double cube_pickup_ticks = 0;
+  private double cone_pickup_ticks = 0;
   
 
 
@@ -50,6 +52,16 @@ public class ElevatorPosSet extends CommandBase {
     else if (position == ("cone_high/cube_mid")){
         elevatorModule.setElevatorTicks(high_cone_ticks);
     }
+    else if (position == ("cube_pickup")){
+        elevatorModule.setElevatorTicks(cube_pickup_ticks);
+    }
+    else if (position == ("cone_pickup")){
+        elevatorModule.setElevatorTicks(cone_pickup_ticks);
+    }
+    else{
+        elevatorModule.setElevatorPower(0);
+    }
+
 
 
   }

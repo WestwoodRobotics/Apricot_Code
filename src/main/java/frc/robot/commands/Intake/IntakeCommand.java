@@ -10,10 +10,12 @@ import frc.robot.subsystems.intake.IntakeModule;
 public class IntakeCommand extends CommandBase {
     // useful variables
     private XboxController controller;
+    private XboxController controller2;
     private IntakeModule intakeModule;
 
-    public IntakeCommand(IntakeModule intakeModule, XboxController controller) {
+    public IntakeCommand(IntakeModule intakeModule, XboxController controller, XboxController controller2) {
         this.controller = controller;
+        this.controller2 = controller2;
         this.intakeModule = intakeModule;
         addRequirements(intakeModule);
 
@@ -33,5 +35,9 @@ public class IntakeCommand extends CommandBase {
             intakeModule.setIntakePower(0);
         }
         //change to whileHeld command (OnTrue?)
+
+        if ((controller2.getRawAxis(3) > 0.1) || (controller2.getRawAxis(3) < 0.1))  { //TODO: Make sure Axus Number is Correct
+            intakeModule.setIntakePower(controller.getRawAxis(0));
+        }
     }
 }
