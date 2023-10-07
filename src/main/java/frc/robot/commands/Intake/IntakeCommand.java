@@ -35,9 +35,14 @@ public class IntakeCommand extends CommandBase {
             intakeModule.setIntakePower(0);
         }
         //change to whileHeld command (OnTrue?)
-
-        if ((controller2.getRawAxis(3) > 0.1) || (controller2.getRawAxis(3) < 0.1))  { //TODO: Make sure Axus Number is Correct
-            intakeModule.setIntakePower(controller.getRawAxis(0));
-        }
+        
+        
+       /* else if (controller2.getLeftTriggerAxis() > 0) {
+            intakeModule.setIntakePower(1);
+        } else if (controller2.getRightTriggerAxis() > 0) {
+            intakeModule.setIntakePower(-1);
+        } else if (controller2.getLeftTriggerAxis() == 0 && controller2.getRightTriggerAxis() == 0) {
+            intakeModule.setIntakePower(0);
+        }*/
     }
 }

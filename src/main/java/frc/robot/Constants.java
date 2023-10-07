@@ -144,6 +144,15 @@ public final class Constants {
   }
   public static final class ElevatorConstants {
     public static final int kElevatorMotor = 20;
+    public static double kP = 0;
+    public static double kI = 0;
+    public static double kD = 0;
+
+    public static int elev_cube_pickup = 0;
+    public static int elev_cone_pickup = 2;
+    public static int elev_outtake = 100;
+
+    
   }
   public static final class IntakeConstants {
     public static final int kIntakeMotor = 22;
@@ -151,7 +160,15 @@ public final class Constants {
   }
   public static final class ArmConstants{
     public static final int kArmMotor = 21;
+
+    public static int arm_cube_pickup = 70; //also arm cone high and mid cube outtake
+    public static int arm_cone_pickup = 100; //also arm cone mid outtake
+    public static int arm_cube_outtake = 0; //refers to high and low outtake
+
+
+
   }
+
 
 
 }

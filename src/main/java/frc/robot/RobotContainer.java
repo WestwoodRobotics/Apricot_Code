@@ -27,15 +27,15 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.Intake.IntakeCommand;
-import frc.robot.commands.arm.ArmCommand;
-import frc.robot.commands.arm.ArmPosSet;
 import frc.robot.commands.elevator.ElevatorCommand;
 import frc.robot.commands.elevator.ElevatorPosSet;
 import frc.robot.commands.swerve.driveCommand;
-import frc.robot.subsystems.arm.ArmModule;
+import frc.robot.commands.wrist.WristCommand;
+import frc.robot.commands.wrist.WristPosSet;
 import frc.robot.subsystems.elevator.ElevatorModule;
 import frc.robot.subsystems.intake.IntakeModule;
 import frc.robot.subsystems.swerve.DriveSubsystem;
+import frc.robot.subsystems.wrist.WristModule;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -46,15 +46,15 @@ import frc.robot.subsystems.swerve.DriveSubsystem;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  // if this breaks, just delete it, I have no idea what I'm doing
   private final IntakeModule m_intakeModule = new IntakeModule();
   private final ElevatorModule m_elevatorModule = new ElevatorModule();
-  private final ArmModule m_armModule = new ArmModule();
+  private final WristModule m_armModule = new WristModule();
   
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-
+  XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
+  
   private final JoystickButton yButton = new JoystickButton(m_driverController, XboxController.Button.kY.value);
   private final JoystickButton aButton = new JoystickButton(m_driverController, XboxController.Button.kA.value);
   private final JoystickButton bButton = new JoystickButton(m_driverController, XboxController.Button.kB.value);
@@ -68,7 +68,7 @@ public class RobotContainer {
   private final JoystickButton rightBumper = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
   private final JoystickButton leftBumper = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
 
-  XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
+
   private final JoystickButton y2Button = new JoystickButton(m_operatorController, XboxController.Button.kY.value);
   private final JoystickButton a2Button = new JoystickButton(m_operatorController, XboxController.Button.kA.value);
   private final JoystickButton b2Button = new JoystickButton(m_operatorController, XboxController.Button.kB.value);
@@ -86,7 +86,7 @@ public class RobotContainer {
     m_robotDrive.setDefaultCommand(new driveCommand(m_robotDrive, m_driverController));
     m_intakeModule.setDefaultCommand(new IntakeCommand(m_intakeModule, m_driverController, m_operatorController));
     m_elevatorModule.setDefaultCommand(new ElevatorCommand(m_elevatorModule, m_driverController, m_operatorController));
-    m_armModule.setDefaultCommand(new ArmCommand(m_armModule, m_driverController));
+    m_armModule.setDefaultCommand(new WristCommand(m_armModule, m_driverController, m_operatorController));
 
   }
 
@@ -107,28 +107,28 @@ public class RobotContainer {
             m_robotDrive));
 
 
-    dPadUp.whileTrue(new InstantCommand(() -> m_elevatorModule.setElevatorPower(-0.25)));
-    dPadDown.whileTrue(new InstantCommand(() -> m_elevatorModule.setElevatorPower(0.25)));
-    dPadLeft.whileTrue(new InstantCommand(() -> m_intakeModule.setIntakePower(-0.25)));
-    dPadRight.whileTrue(new InstantCommand(() -> m_intakeModule.setIntakePower(0.25)));
+    // dPadUp.whileTrue(new InstantCommand(() -> m_elevatorModule.setElevatorPower(-0.25)));
+    // dPadDown.whileTrue(new InstantCommand(() -> m_elevatorModule.setElevatorPower(0.25)));
+    // dPadLeft.whileTrue(new InstantCommand(() -> m_armModule.setArmPower(-0.25)));
+    // dPadRight.whileTrue(new InstantCommand(() -> m_armModule.setArmPower(0.25)));
 
-    leftBumper.onTrue(new ElevatorPosSet(m_elevatorModule, "cube_pickup")
-              .andThen(new ArmPosSet(m_armModule, "cube_pickup")));
-    rightBumper.onTrue(new ElevatorPosSet(m_elevatorModule, "cone_pickup")
-              .andThen(new ArmPosSet(m_armModule, "cone_pickup")));
+    // leftBumper.onTrue(new ElevatorPosSet(m_elevatorModule, "cube_pickup")
+    //           .andThen(new ArmPosSet(m_armModule, "cube_pickup")));
+    // rightBumper.onTrue(new ElevatorPosSet(m_elevatorModule, "cone_pickup")
+    //           .andThen(new ArmPosSet(m_armModule, "cone_pickup")));
 
-    aButton.onTrue(new ElevatorPosSet(m_elevatorModule, "home/low_cube")
-              .andThen(new ArmPosSet(m_armModule, "home/low_cube")));
-    yButton.onTrue(new ElevatorPosSet(m_elevatorModule, "cone_high/cube_mid")
-              .andThen(new ArmPosSet(m_armModule, "cone_high/cube_mid")));
-    bButton.onTrue(new ElevatorPosSet(m_elevatorModule, "cone_mid")
-              .andThen(new ArmPosSet(m_armModule, "cone_mid")));
-    xButton.onTrue(new ElevatorPosSet(m_elevatorModule, "cube_high")
-              .andThen(new ArmPosSet(m_armModule, "cube_high")));
+    // aButton.onTrue(new ElevatorPosSet(m_elevatorModule, "home/low_cube")
+    //           .andThen(new ArmPosSet(m_armModule, "home/low_cube")));
+    // yButton.onTrue(new ElevatorPosSet(m_elevatorModule, "cone_high/cube_mid")
+    //           .andThen(new ArmPosSet(m_armModule, "cone_high/cube_mid")));
+    // bButton.onTrue(new ElevatorPosSet(m_elevatorModule, "cone_mid")
+    //           .andThen(new ArmPosSet(m_armModule, "cone_mid")));
+    // xButton.onTrue(new ElevatorPosSet(m_elevatorModule, "cube_high")
+    //           .andThen(new ArmPosSet(m_armModule, "cube_high")));
 
 
-    a2Button.onTrue(new ElevatorPosSet(m_elevatorModule, "home/low_cube")
-              .andThen(new ArmPosSet(m_armModule, "home/low_cube")));  
+    // a2Button.onTrue(new ElevatorPosSet(m_elevatorModule, "home/low_cube")
+    //           .andThen(new ArmPosSet(m_armModule, "home/low_cube")));  
 
     
     

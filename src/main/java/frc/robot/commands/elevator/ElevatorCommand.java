@@ -4,6 +4,7 @@
 
 package frc.robot.commands.elevator;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -17,13 +18,17 @@ public class ElevatorCommand extends CommandBase {
   private XboxController controller2;
   private ElevatorModule elevatorModule;
 
-  private final POVButton dPadUp = new POVButton(controller, 0);
-  private final POVButton dPadDown = new POVButton(controller, 180);
+  private POVButton dPadUp;
+  private POVButton dPadDown;
 
   public ElevatorCommand(ElevatorModule elevatorModule, XboxController controller, XboxController controller2) {
     this.controller = controller;
     this.controller2 = controller2;
     this.elevatorModule = elevatorModule;
+    dPadDown = new POVButton(controller2, 0);
+    dPadUp = new POVButton(controller2,180);
+  
+
     addRequirements(elevatorModule);
   }
 
@@ -35,11 +40,11 @@ public class ElevatorCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    dPadUp.whileTrue(new InstantCommand(() -> elevatorModule.setElevatorPower(0.25)));
-    dPadDown.whileTrue(new InstantCommand(() -> elevatorModule.setElevatorPower(-0.25)));
-    
-    if ((controller2.getRawAxis(0) > 0.1) || (controller2.getRawAxis(1) < -0.1)) {//TODO: Make sure Axus Number is Correct
-      elevatorModule.setElevatorPower(controller.getRawAxis(0));
+    if ((controller2.getRawAxis(1) > 0.1) || (controller2.getRawAxis(1) < -0.1)) {//TODO: Make sure Axis Number is Correct
+      elevatorModule.setElevatorPower(controller2.getRawAxis(1));
+    }
+    else{
+      elevatorModule.setElevatorPower(0);
     }
   }
 

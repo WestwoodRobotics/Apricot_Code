@@ -6,6 +6,7 @@ package frc.robot.commands.elevator;
 
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.elevator.ElevatorModule;
 
 public class ElevatorPosSet extends CommandBase {
@@ -13,15 +14,6 @@ public class ElevatorPosSet extends CommandBase {
 
   private ElevatorModule elevatorModule;
   private String position = new String();
-
-  private double homeTicks = 0;
-  private double mid_cone_ticks = 0;
-  private double high_cube_ticks = 0;
-  private double high_cone_ticks = 0;
-  private double cube_pickup_ticks = 0;
-  private double cone_pickup_ticks = 0;
-  
-
 
   public ElevatorPosSet(ElevatorModule elevatorModule, String position) {
 
@@ -40,23 +32,24 @@ public class ElevatorPosSet extends CommandBase {
   @Override
   public void execute() {
     
-    if (position == ("home/low_cube")){
-        elevatorModule.setElevatorTicks(homeTicks);
+    if (position == "home/low_cube"){
+        elevatorModule.setElevatorTicks(Constants.ElevatorConstants.elev_cube_pickup);
+        
     }
-    else if(position == ("cone_mid")){
-        elevatorModule.setElevatorTicks(mid_cone_ticks);
+    else if(position == "cone_mid"){
+        elevatorModule.setElevatorTicks(Constants.ElevatorConstants.elev_outtake);
     }
-    else if(position == ("cube_high")){
-        elevatorModule.setElevatorTicks(high_cube_ticks);
+    else if(position == "cube_high"){
+        elevatorModule.setElevatorTicks(Constants.ElevatorConstants.elev_outtake);
     }
-    else if (position == ("cone_high/cube_mid")){
-        elevatorModule.setElevatorTicks(high_cone_ticks);
+    else if (position == "cone_high/cube_mid"){
+        elevatorModule.setElevatorTicks(Constants.ElevatorConstants.elev_outtake);
     }
-    else if (position == ("cube_pickup")){
-        elevatorModule.setElevatorTicks(cube_pickup_ticks);
+    else if (position == "cube_pickup"){
+        elevatorModule.setElevatorTicks(Constants.ElevatorConstants.elev_outtake);
     }
-    else if (position == ("cone_pickup")){
-        elevatorModule.setElevatorTicks(cone_pickup_ticks);
+    else if (position == "cone_pickup"){
+        elevatorModule.setElevatorTicks(Constants.ElevatorConstants.elev_outtake);
     }
     else{
         elevatorModule.setElevatorPower(0);
@@ -73,6 +66,9 @@ public class ElevatorPosSet extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if(elevatorModule.atSetpoint()){
+      return true;
+    }
     return false;
   }
 }

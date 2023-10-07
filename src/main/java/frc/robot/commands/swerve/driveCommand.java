@@ -68,10 +68,10 @@ public class driveCommand extends CommandBase {
       rightX *= Constants.DriveConstants.slowModeMultiplier;
     }
     if (YuMode){
-      m_swerveDrive.drive(rightY, rightX, leftX, true, true);
+      m_swerveDrive.drive(rightY, rightX, leftX, false, true);
     }
     else{
-      m_swerveDrive.drive(leftY, leftX, rightX, true, true);
+      m_swerveDrive.drive(leftY, leftX, rightX, false, true);
     }
 
   }
