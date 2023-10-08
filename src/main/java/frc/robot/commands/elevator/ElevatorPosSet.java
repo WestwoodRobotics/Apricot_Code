@@ -13,12 +13,12 @@ public class ElevatorPosSet extends CommandBase {
   
 
   private ElevatorModule elevatorModule;
-  private String position = new String();
+  private String position;
 
-  public ElevatorPosSet(ElevatorModule elevatorModule, String position) {
+  public ElevatorPosSet(ElevatorModule elevatorModule) {
 
     this.elevatorModule = elevatorModule;
-    this.position = position;
+    this.position = "elev_cube_pickup";
     addRequirements(elevatorModule);
     
   }
@@ -55,8 +55,10 @@ public class ElevatorPosSet extends CommandBase {
         elevatorModule.setElevatorPower(0);
     }
 
+  }
 
-
+  public void elevSetPos(String position) {
+    this.position = position;
   }
 
   // Called once the command ends or is interrupted.

@@ -148,9 +148,9 @@ public final class Constants {
     public static double kI = 0;
     public static double kD = 0;
 
-    public static int elev_cube_pickup = 0;
-    public static int elev_cone_pickup = 2;
-    public static int elev_outtake = 100;
+    public static int elev_cube_pickup = 5;
+    public static int elev_cone_pickup = 7;
+    public static int elev_outtake = 90;
 
     
   }

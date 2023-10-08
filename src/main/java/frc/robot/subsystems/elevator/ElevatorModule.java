@@ -17,7 +17,7 @@ public class ElevatorModule extends SubsystemBase{
     public ElevatorModule()
     {
         elevatorMotor = new CANSparkMax(ElevatorConstants.kElevatorMotor, MotorType.kBrushless);
-        elevatorMotor.setInverted(true);
+        elevatorMotor.setInverted(false);
         elevatorEncoder = elevatorMotor.getEncoder();
         elevPidController = new PIDController(ElevatorConstants.kP, ElevatorConstants.kI, ElevatorConstants.kD);
         elevPidController.setTolerance(1);

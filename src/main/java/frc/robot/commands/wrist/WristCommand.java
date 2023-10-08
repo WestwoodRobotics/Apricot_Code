@@ -12,11 +12,14 @@ public class WristCommand extends CommandBase {
   private XboxController controller;
   private XboxController controller2;
   private WristModule armModule;
+  private WristPosSet wristPos;
   
   public WristCommand(WristModule armModule, XboxController controller, XboxController controller2) {
     this.controller = controller;
     this.controller2 = controller2;
     this.armModule = armModule;
+
+    wristPos = new WristPosSet(armModule);
     addRequirements(armModule);
   }
 
@@ -27,11 +30,29 @@ public class WristCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
     /*if ((controller2.getRawAxis(0) > 0.1) || (controller2.getRawAxis(0) < 0.1))  { //TODO: Make sure Axus Number is Correct
+      armModule.setArmPower(controller2.getRawAxis(0));
+
     }
-    else{0
-      armModule.setArmPower(0);*/
+    else{
+      armModule.setArmPower(0);
+    }*/
     armModule.setArmPower(controller2.getRawAxis(5));
+
+
+    /*if (controller.getLeftBumperPressed()) {wristPos.wristSetPos("cube_pickup");}
+    else if (controller.getRightBumperPressed()) {wristPos.wristSetPos("cone_pickup");}
+    else if (controller.getAButtonPressed()) {wristPos.wristSetPos("home/low_cube");}
+    else if (controller.getBButtonPressed()) {wristPos.wristSetPos("cone_mid");}
+    else if (controller.getXButtonPressed()) {wristPos.wristSetPos("cone_high/cube_mid");}
+    else if (controller.getPOV() == 0) {armModule.setArmPower(0.25);} //may need to switch
+    else if (controller.getPOV() == 180) {armModule.setArmPower(-0.25);}
+    else {armModule.setArmPower(0);}
+
+    wristPos.execute();*/
+
+    
 
   }
 

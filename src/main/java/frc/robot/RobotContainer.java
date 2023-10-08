@@ -101,10 +101,10 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    new JoystickButton(m_driverController, Button.kR1.value) // if R1 is pressed wheels should go into x formation
+    /*new JoystickButton(m_driverController, Button.kR1.value) // if R1 is pressed wheels should go into x formation
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
-            m_robotDrive));
+            m_robotDrive));*/
 
 
     // dPadUp.whileTrue(new InstantCommand(() -> m_elevatorModule.setElevatorPower(-0.25)));

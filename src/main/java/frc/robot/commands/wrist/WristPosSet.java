@@ -14,9 +14,9 @@ public class WristPosSet extends CommandBase {
   private String position = new String();
 
 
-  public WristPosSet(WristModule armModule, String position) {
+  public WristPosSet(WristModule armModule) {
     this.armModule = armModule;
-    this.position = position;
+    this.position = "home/low_cube";
     addRequirements(armModule);
     
   }
@@ -29,29 +29,35 @@ public class WristPosSet extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    System.out.print("Executed");
 
     if (position == ("home/low_cube")){
       armModule.setArmTicks(Constants.ArmConstants.arm_cube_outtake);
   }
   else if(position == ("cone_mid")){
-      armModule.setArmTicks(mid_cone_ticks);
+      armModule.setArmTicks(Constants.ArmConstants.arm_cone_pickup);
   }
   else if(position == ("cube_high")){
-      armModule.setArmTicks(high_cube_ticks);
+      armModule.setArmTicks(Constants.ArmConstants.arm_cube_outtake);
   }
   else if (position == ("cone_high/cube_mid")){
-      armModule.setArmTicks(high_cone_ticks);
+      armModule.setArmTicks(Constants.ArmConstants.arm_cube_pickup);
   }
   else if (position == ("cube_pickup")){
-      armModule.setArmTicks(cube_pickup_ticks);
+      armModule.setArmTicks(Constants.ArmConstants.arm_cube_pickup);
   }
   else if (position == ("cone_pickup")){
-      armModule.setArmTicks(cone_pickup_ticks);
+      armModule.setArmTicks(Constants.ArmConstants.arm_cone_pickup);
   }
   else{
       armModule.setArmPower(0);
   }
 
+  }
+
+  public void wristSetPos(String position)
+  {
+    this.position = position;
   }
 
 

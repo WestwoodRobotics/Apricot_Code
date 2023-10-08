@@ -17,16 +17,18 @@ public class ElevatorCommand extends CommandBase {
   private XboxController controller;
   private XboxController controller2;
   private ElevatorModule elevatorModule;
+  private ElevatorPosSet elevPos;
 
-  private POVButton dPadUp;
-  private POVButton dPadDown;
+  //private POVButton dPadUp;
+  //private POVButton dPadDown;
 
   public ElevatorCommand(ElevatorModule elevatorModule, XboxController controller, XboxController controller2) {
     this.controller = controller;
     this.controller2 = controller2;
     this.elevatorModule = elevatorModule;
-    dPadDown = new POVButton(controller2, 0);
-    dPadUp = new POVButton(controller2,180);
+    //dPadDown = new POVButton(controller2, 0);
+    //dPadUp = new POVButton(controller2,180);
+    elevPos = new ElevatorPosSet(elevatorModule);
   
 
     addRequirements(elevatorModule);
@@ -46,6 +48,19 @@ public class ElevatorCommand extends CommandBase {
     else{
       elevatorModule.setElevatorPower(0);
     }
+
+    //elevatorModule.setElevatorPower(controller.getRawAxis(1);)
+
+    /*if (controller.getLeftBumperPressed()) {elevPos.elevSetPos("cube_pickup");}
+    else if (controller.getRightBumperPressed()) {elevPos.elevSetPos("cone_pickup");}
+    else if (controller.getAButton()) {elevPos.elevSetPos("home/low_cube");}
+    else if (controller.getBButton()) {elevPos.elevSetPos("cone_mid");}
+    else if (controller.getXButton()) {elevPos.elevSetPos("cone_high/cube_mid");}
+    else if (controller.getPOV() == 0) {elevatorModule.setElevatorPower(0.25);} //may need to switch
+    else if (controller.getPOV() == 180) {elevatorModule.setElevatorPower(-0.25);}
+    else {elevatorModule.setElevatorPower(0);}
+
+    elevPos.execute();*/
   }
 
   // Called once the command ends or is interrupted.
