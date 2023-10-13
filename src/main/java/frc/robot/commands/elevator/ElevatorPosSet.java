@@ -31,10 +31,9 @@ public class ElevatorPosSet extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+
     if (position == "cube_pickup"){
         elevatorModule.setElevatorTicks(Constants.ElevatorConstants.elev_cube_pickup);
-        
     }
     if(position == "cone_pickup"){
       elevatorModule.setElevatorTicks(Constants.ElevatorConstants.elev_cone_pickup);
@@ -48,13 +47,13 @@ public class ElevatorPosSet extends CommandBase {
 
   }
 
-  public void elevSetPos(String position) {
-    this.position = position;
-  }
+
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    elevatorModule.setElevatorPower(0);
+  }
 
   // Returns true when the command should end.
   @Override

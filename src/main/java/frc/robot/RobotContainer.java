@@ -118,7 +118,7 @@ public class RobotContainer {
               .andThen(new WristPosSet(m_wristModule, "cone_pickup")));
 
     aButton.onTrue(new ElevatorPosSet(m_elevatorModule, "cube_pickup")
-              .andThen(new WristPosSet(m_wristModule, "cube_pickup")));//
+              .andThen(new WristPosSet(m_wristModule, "cube_pickup")));
     yButton.onTrue(new ElevatorPosSet(m_elevatorModule, "elevator_init")
               .andThen(new WristPosSet(m_wristModule, "cone_high/cube_mid")));
     bButton.onTrue(new ElevatorPosSet(m_elevatorModule, "elevator_init")
