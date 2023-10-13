@@ -15,10 +15,10 @@ public class ElevatorPosSet extends CommandBase {
   private ElevatorModule elevatorModule;
   private String position;
 
-  public ElevatorPosSet(ElevatorModule elevatorModule) {
+  public ElevatorPosSet(ElevatorModule elevatorModule, String position) {
 
     this.elevatorModule = elevatorModule;
-    this.position = "elev_cube_pickup";
+    this.position = position;
     addRequirements(elevatorModule);
     
   }
@@ -32,24 +32,15 @@ public class ElevatorPosSet extends CommandBase {
   @Override
   public void execute() {
     
-    if (position == "home/low_cube"){
+    if (position == "cube_pickup"){
         elevatorModule.setElevatorTicks(Constants.ElevatorConstants.elev_cube_pickup);
         
     }
-    else if(position == "cone_mid"){
-        elevatorModule.setElevatorTicks(Constants.ElevatorConstants.elev_outtake);
+    if(position == "cone_pickup"){
+      elevatorModule.setElevatorTicks(Constants.ElevatorConstants.elev_cone_pickup);
     }
-    else if(position == "cube_high"){
-        elevatorModule.setElevatorTicks(Constants.ElevatorConstants.elev_outtake);
-    }
-    else if (position == "cone_high/cube_mid"){
-        elevatorModule.setElevatorTicks(Constants.ElevatorConstants.elev_outtake);
-    }
-    else if (position == "cube_pickup"){
-        elevatorModule.setElevatorTicks(Constants.ElevatorConstants.elev_outtake);
-    }
-    else if (position == "cone_pickup"){
-        elevatorModule.setElevatorTicks(Constants.ElevatorConstants.elev_outtake);
+    if(position == "elevator_init"){
+      elevatorModule.setElevatorTicks(Constants.ElevatorConstants.elev_outtake);
     }
     else{
         elevatorModule.setElevatorPower(0);

@@ -39,18 +39,17 @@ public class WristModule extends SubsystemBase {
 
   public void setArmTicks(double ticks) {
 
-    if(ticks > this.getEncoderPosition()){
+    while(ticks > this.getEncoderPosition()){
          armMotor.set(0.25);
     } 
-    else if (ticks < this.getEncoderPosition()){
+    while(ticks < this.getEncoderPosition()){
          armMotor.set(-0.25);
     } 
-    else {
-         armMotor.set(0);
-    }
+    armMotor.set(0);
   /*@Override
   public void periodic() {
     // This method will be called once per scheduler run
   }*/
   }
+  
 }

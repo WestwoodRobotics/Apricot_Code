@@ -28,7 +28,7 @@ public class ElevatorCommand extends CommandBase {
     this.elevatorModule = elevatorModule;
     //dPadDown = new POVButton(controller2, 0);
     //dPadUp = new POVButton(controller2,180);
-    elevPos = new ElevatorPosSet(elevatorModule);
+
   
 
     addRequirements(elevatorModule);

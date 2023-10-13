@@ -48,7 +48,7 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final IntakeModule m_intakeModule = new IntakeModule();
   private final ElevatorModule m_elevatorModule = new ElevatorModule();
-  private final WristModule m_armModule = new WristModule();
+  private final WristModule m_wristModule = new WristModule();
   
 
   // The driver's controller
@@ -82,11 +82,11 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
-    // Configure default commands
+    // Configure default commands 
     m_robotDrive.setDefaultCommand(new driveCommand(m_robotDrive, m_driverController));
     m_intakeModule.setDefaultCommand(new IntakeCommand(m_intakeModule, m_driverController, m_operatorController));
     m_elevatorModule.setDefaultCommand(new ElevatorCommand(m_elevatorModule, m_driverController, m_operatorController));
-    m_armModule.setDefaultCommand(new WristCommand(m_armModule, m_driverController, m_operatorController));
+    m_wristModule.setDefaultCommand(new WristCommand(m_wristModule, m_driverController, m_operatorController));
 
   }
 
@@ -109,26 +109,26 @@ public class RobotContainer {
 
     // dPadUp.whileTrue(new InstantCommand(() -> m_elevatorModule.setElevatorPower(-0.25)));
     // dPadDown.whileTrue(new InstantCommand(() -> m_elevatorModule.setElevatorPower(0.25)));
-    // dPadLeft.whileTrue(new InstantCommand(() -> m_armModule.setArmPower(-0.25)));
-    // dPadRight.whileTrue(new InstantCommand(() -> m_armModule.setArmPower(0.25)));
+    // dPadLeft.whileTrue(new InstantCommand(() -> m_wristModule.setArmPower(-0.25)));
+    // dPadRight.whileTrue(new InstantCommand(() -> m_wristModule.setArmPower(0.25)));
 
-    // leftBumper.onTrue(new ElevatorPosSet(m_elevatorModule, "cube_pickup")
-    //           .andThen(new ArmPosSet(m_armModule, "cube_pickup")));
-    // rightBumper.onTrue(new ElevatorPosSet(m_elevatorModule, "cone_pickup")
-    //           .andThen(new ArmPosSet(m_armModule, "cone_pickup")));
+    leftBumper.onTrue(new ElevatorPosSet(m_elevatorModule, "cube_pickup")
+              .andThen(new WristPosSet(m_wristModule, "cube_pickup")));
+    rightBumper.onTrue(new ElevatorPosSet(m_elevatorModule, "cone_pickup")
+              .andThen(new WristPosSet(m_wristModule, "cone_pickup")));
 
-    // aButton.onTrue(new ElevatorPosSet(m_elevatorModule, "home/low_cube")
-    //           .andThen(new ArmPosSet(m_armModule, "home/low_cube")));
-    // yButton.onTrue(new ElevatorPosSet(m_elevatorModule, "cone_high/cube_mid")
-    //           .andThen(new ArmPosSet(m_armModule, "cone_high/cube_mid")));
-    // bButton.onTrue(new ElevatorPosSet(m_elevatorModule, "cone_mid")
-    //           .andThen(new ArmPosSet(m_armModule, "cone_mid")));
-    // xButton.onTrue(new ElevatorPosSet(m_elevatorModule, "cube_high")
-    //           .andThen(new ArmPosSet(m_armModule, "cube_high")));
+    aButton.onTrue(new ElevatorPosSet(m_elevatorModule, "cube_pickup")
+              .andThen(new WristPosSet(m_wristModule, "cube_pickup")));//
+    yButton.onTrue(new ElevatorPosSet(m_elevatorModule, "elevator_init")
+              .andThen(new WristPosSet(m_wristModule, "cone_high/cube_mid")));
+    bButton.onTrue(new ElevatorPosSet(m_elevatorModule, "elevator_init")
+              .andThen(new WristPosSet(m_wristModule, "cone_mid")));
+    xButton.onTrue(new ElevatorPosSet(m_elevatorModule, "elevator_init")
+              .andThen(new WristPosSet(m_wristModule, "cube_high")));
 
 
     // a2Button.onTrue(new ElevatorPosSet(m_elevatorModule, "home/low_cube")
-    //           .andThen(new ArmPosSet(m_armModule, "home/low_cube")));  
+    //           .andThen(new WristPosSet(m_wristModule, "home/low_cube")));  
 
     
     

@@ -14,9 +14,9 @@ public class WristPosSet extends CommandBase {
   private String position = new String();
 
 
-  public WristPosSet(WristModule armModule) {
+  public WristPosSet(WristModule armModule, String position) {
     this.armModule = armModule;
-    this.position = "home/low_cube";
+    this.position = position;
     addRequirements(armModule);
     
   }

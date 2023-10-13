@@ -19,7 +19,6 @@ public class WristCommand extends CommandBase {
     this.controller2 = controller2;
     this.armModule = armModule;
 
-    wristPos = new WristPosSet(armModule);
     addRequirements(armModule);
   }
 
