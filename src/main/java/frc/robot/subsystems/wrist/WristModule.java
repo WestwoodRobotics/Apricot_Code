@@ -11,6 +11,7 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
+import com.revrobotics.CANSparkMax.IdleMode;
 
 public class WristModule extends SubsystemBase {
   private final CANSparkMax armMotor;
@@ -26,6 +27,7 @@ public class WristModule extends SubsystemBase {
     wristPidController = new PIDController(ArmConstants.kP, ArmConstants.kI, ArmConstants.kD);
     wristPidController.setTolerance(1);
     resetEncoder();
+    armMotor.setIdleMode(IdleMode.kBrake);
   }
 
   public void setArmPower(double power)

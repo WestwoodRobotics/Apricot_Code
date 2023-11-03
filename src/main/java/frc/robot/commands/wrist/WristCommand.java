@@ -37,7 +37,7 @@ public class WristCommand extends CommandBase {
     else{
       armModule.setArmPower(0);
     }*/
-    armModule.setArmPower(controller2.getRawAxis(5));
+    armModule.setArmPower(-controller2.getRawAxis(5));
 
 
     /*if (controller.getLeftBumperPressed()) {wristPos.wristSetPos("cube_pickup");}

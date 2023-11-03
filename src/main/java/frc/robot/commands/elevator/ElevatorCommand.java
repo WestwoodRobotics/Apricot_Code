@@ -43,7 +43,7 @@ public class ElevatorCommand extends CommandBase {
   @Override
   public void execute() {
     if ((controller2.getRawAxis(1) > 0.1) || (controller2.getRawAxis(1) < -0.1)) {//TODO: Make sure Axis Number is Correct
-      elevatorModule.setElevatorPower(controller2.getRawAxis(1));
+      elevatorModule.setElevatorPower(-controller2.getRawAxis(1));
     }
     else{
       elevatorModule.setElevatorPower(0);
