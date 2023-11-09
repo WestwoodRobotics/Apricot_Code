@@ -5,6 +5,7 @@
 package frc.robot.subsystems.swerve;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -73,7 +74,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
-       armMotor.setIdleMode(IdleMode.kBrake);
+
 
     }
 
@@ -88,7 +89,7 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
-        SmartDashboard.putNumber("Bridge Angle", m_gyro.getAngle());
+        SmartDashboard.putNumber("Gyro Angle", m_gyro.getAngle());
 
 
   }
