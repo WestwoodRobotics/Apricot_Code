@@ -45,12 +45,12 @@ public class ElevatorModule extends SubsystemBase{
         currentSetPoint = ticks;
         elevatorMotor.setVoltage(elevPidController.calculate(elevatorEncoder.getPosition(), ticks));
        while(ticks > this.getEncoderPosition()){
-            elevatorMotor.set(0.25);
+            elevatorMotor.set(0.5);
             System.out.println("AT ELEVATOR1 MODULE!");
             break;
        } 
        while (ticks < this.getEncoderPosition()){
-            elevatorMotor.set(-0.25);
+            elevatorMotor.set(-0.5);
             System.out.println("AT ELEVATOR2 MODULE!");
             break;
        } 
