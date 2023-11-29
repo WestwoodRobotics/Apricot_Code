@@ -30,7 +30,7 @@ public class WristCommand extends CommandBase {
   @Override
   public void execute() {
     
-    /*if ((controller2.getRawAxis(0) > 0.1) || (controller2.getRawAxis(0) < 0.1))  { //TODO: Make sure Axus Number is Correct
+    /*if ((controller2.getRawAxis(0) > 0.1) || (controller2.getRawAxis(0) < 0.1))  {
       armModule.setArmPower(controller2.getRawAxis(0));
 
     }

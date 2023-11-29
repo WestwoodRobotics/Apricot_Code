@@ -42,7 +42,7 @@ public class ElevatorCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if ((controller2.getRawAxis(1) > 0.1) || (controller2.getRawAxis(1) < -0.1)) {//TODO: Make sure Axis Number is Correct
+    if ((controller2.getRawAxis(1) > 0.1) || (controller2.getRawAxis(1) < -0.1)) {
       elevatorModule.setElevatorPower(-controller2.getRawAxis(1));
     }
     else{
