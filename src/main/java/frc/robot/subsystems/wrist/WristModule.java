@@ -17,7 +17,7 @@ public class WristModule extends SubsystemBase {
   private final CANSparkMax armMotor;
   private final RelativeEncoder armEncoder;
   private final PIDController wristPidController;
-  private double currentSetPoint = 0;
+
   
   public WristModule()
   {
@@ -47,7 +47,7 @@ public class WristModule extends SubsystemBase {
 
 
     public void setArmTicks(double ticks) {
-      currentSetPoint = ticks;
+
       armMotor.setVoltage(wristPidController.calculate(armEncoder.getPosition(), ticks));
      while(ticks > this.getEncoderPosition()){
           armMotor.set(0.25);

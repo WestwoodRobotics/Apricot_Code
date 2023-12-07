@@ -5,6 +5,7 @@
 
 package frc.robot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -17,12 +18,13 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
+
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
+//import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -60,19 +62,19 @@ public class RobotContainer {
   private final JoystickButton bButton = new JoystickButton(m_driverController, XboxController.Button.kB.value);
   private final JoystickButton xButton = new JoystickButton(m_driverController, XboxController.Button.kX.value);
 
-  private final POVButton dPadUp = new POVButton(m_driverController, 0);
-  private final POVButton dPadRight = new POVButton(m_driverController, 90);
-  private final POVButton dPadDown = new POVButton(m_driverController, 180);
-  private final POVButton dPadLeft = new POVButton(m_driverController, 270);
+  // private final POVButton dPadUp = new POVButton(m_driverController, 0);
+  // private final POVButton dPadRight = new POVButton(m_driverController, 90);
+  // private final POVButton dPadDown = new POVButton(m_driverController, 180);
+  // private final POVButton dPadLeft = new POVButton(m_driverController, 270);
 
   private final JoystickButton rightBumper = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
   private final JoystickButton leftBumper = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
 
 
-  private final JoystickButton y2Button = new JoystickButton(m_operatorController, XboxController.Button.kY.value);
-  private final JoystickButton a2Button = new JoystickButton(m_operatorController, XboxController.Button.kA.value);
-  private final JoystickButton b2Button = new JoystickButton(m_operatorController, XboxController.Button.kB.value);
-  private final JoystickButton x2Button = new JoystickButton(m_operatorController, XboxController.Button.kX.value);
+  // private final JoystickButton y2Button = new JoystickButton(m_operatorController, XboxController.Button.kY.value);
+  // private final JoystickButton a2Button = new JoystickButton(m_operatorController, XboxController.Button.kA.value);
+  // private final JoystickButton b2Button = new JoystickButton(m_operatorController, XboxController.Button.kB.value);
+  // private final JoystickButton x2Button = new JoystickButton(m_operatorController, XboxController.Button.kX.value);
 
 
   /**
@@ -152,18 +154,28 @@ public class RobotContainer {
         // Add kinematics to ensure max speed is actually obeyed
         .setKinematics(DriveConstants.kDriveKinematics);
 
-    // An example trajectory to follow. All units in meters.
-    
+    // Get points from Smart Dashboard
+    // Get number of waypoints from Smart Dashboard
+    int numberOfWaypoints = (int) SmartDashboard.getNumber("Number of Waypoints", 0);
+
+    // Get points from Smart Dashboard
+    List<Translation2d> interiorWaypoints = new ArrayList<>();
+    for (int i = 0; i < numberOfWaypoints; i++) {
+        double x = SmartDashboard.getNumber("Waypoint " + i + " X", 0);
+        double y = SmartDashboard.getNumber("Waypoint " + i + " Y", 0);
+        interiorWaypoints.add(new Translation2d(x, y));
+    }
+
+    // Generate trajectory
     Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-      
         // Start at the origin facing the +X direction
         new Pose2d(0, 0, new Rotation2d(0.0)),
-
-        // Pass through these two interior waypoints, making an 's' curve path
-        List.of(new Translation2d(-1, 0.007)),
+        // Pass through the interior waypoints
+        interiorWaypoints,
         // End 3 meters straight ahead of where we started, facing forward
         new Pose2d(0, 0, new Rotation2d(0.01)),
         config);
+
 
 
  
@@ -187,7 +199,9 @@ public class RobotContainer {
     // Reset odometry to the starting pose of the trajectory.
     m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
 
+
     // Run path following command, then stop at the end.
     return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
+
   }
 }

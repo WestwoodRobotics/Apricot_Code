@@ -12,7 +12,7 @@ public class ElevatorModule extends SubsystemBase{
     private final CANSparkMax elevatorMotor;
     private final RelativeEncoder elevatorEncoder;
     private final PIDController elevPidController;
-    private double currentSetPoint = 0;
+
 
     public ElevatorModule()
     {
@@ -42,7 +42,7 @@ public class ElevatorModule extends SubsystemBase{
     }
 
     public void setElevatorTicks(double ticks) {
-        currentSetPoint = ticks;
+
         elevatorMotor.setVoltage(elevPidController.calculate(elevatorEncoder.getPosition(), ticks));
        while(ticks > this.getEncoderPosition()){
             elevatorMotor.set(0.5);

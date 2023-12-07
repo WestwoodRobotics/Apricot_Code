@@ -9,13 +9,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.wrist.WristModule;
 
 public class WristCommand extends CommandBase {
-  private XboxController controller;
+  //private XboxController controller;
   private XboxController controller2;
   private WristModule armModule;
-  private WristPosSet wristPos;
+
   
   public WristCommand(WristModule armModule, XboxController controller, XboxController controller2) {
-    this.controller = controller;
+    //this.controller = controller;
     this.controller2 = controller2;
     this.armModule = armModule;
 

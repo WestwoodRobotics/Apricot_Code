@@ -12,7 +12,7 @@ public class WristPosSet extends CommandBase {
   
   private WristModule armModule;
   private String position = new String();
-  private int positionNum;
+
 
 
   public WristPosSet(WristModule armModule, String position) {
@@ -34,32 +34,32 @@ public class WristPosSet extends CommandBase {
 
     if (position == ("home/low_cube")){
       armModule.setArmTicks(Constants.ArmConstants.arm_cube_outtake);
-      positionNum = 0;
+
       System.out.println("REACHED WRIST HOME");
   }
   else if(position == ("cone_mid")){
       armModule.setArmTicks(Constants.ArmConstants.arm_cone_pickup);
-      positionNum = 1;
+
   }
   else if(position == ("cube_high")){
       armModule.setArmTicks(Constants.ArmConstants.arm_cube_outtake);
-      positionNum = 2;
+
   }
   else if (position == ("cone_high/cube_mid")){
       armModule.setArmTicks(Constants.ArmConstants.arm_cube_pickup);
-      positionNum = 3;
+
   }
   else if (position == ("cube_pickup")){
       armModule.setArmTicks(Constants.ArmConstants.arm_cube_pickup);
-      positionNum = 4;
+
   }
   else if (position == ("cone_pickup")){
       armModule.setArmTicks(Constants.ArmConstants.arm_cone_pickup);
-      positionNum = 5;
+
   }
   else{
       armModule.setArmPower(0);
-      positionNum = 0;
+
   }
 
   }

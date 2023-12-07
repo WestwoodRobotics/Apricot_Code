@@ -1,21 +1,21 @@
 package frc.robot.commands.Intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.math.MathUtil;
+//import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.Constants;
-import frc.robot.Constants.OIConstants;
+//import frc.robot.Constants;
+//import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.intake.IntakeModule;
 
 public class IntakeCommand extends CommandBase {
     // useful variables
     private XboxController controller;
-    private XboxController controller2;
+    //private XboxController controller2;
     private IntakeModule intakeModule;
 
     public IntakeCommand(IntakeModule intakeModule, XboxController controller, XboxController controller2) {
         this.controller = controller;
-        this.controller2 = controller2;
+       // this.controller2 = controller2;
         this.intakeModule = intakeModule;
         addRequirements(intakeModule);
 

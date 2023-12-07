@@ -6,21 +6,21 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.swerve.DriveSubsystem;
-import frc.robot.subsystems.swerve.DriveSpeed;
+// import frc.robot.subsystems.swerve.DriveSpeed;
 
-import static frc.robot.Constants.DriveConstants.kMaxAngularSpeed;
-import static frc.robot.Constants.DriveConstants.kMaxSpeedMetersPerSecond;
+// import static frc.robot.Constants.DriveConstants.kMaxAngularSpeed;
+// import static frc.robot.Constants.DriveConstants.kMaxSpeedMetersPerSecond;
 
 public class driveCommand extends CommandBase {
 
   private final DriveSubsystem m_swerveDrive;
-  private final DriveSpeed limJoystickLeft = new DriveSpeed(0.05);
-  private final DriveSpeed limJoystickRight = new DriveSpeed(0.05);
+
+
   private XboxController controller;
   private boolean slowMode;
   private boolean YuMode;
-  private final double  maxSpeed = kMaxSpeedMetersPerSecond;
-  private final double  maxAngularSpeed = kMaxAngularSpeed;
+
+
 
   public driveCommand(DriveSubsystem swerveDrive, XboxController controller) {
     m_swerveDrive = swerveDrive;
@@ -57,9 +57,7 @@ public class driveCommand extends CommandBase {
     rightY = -MathUtil.applyDeadband(controller.getRightY(), OIConstants.kDriveDeadband);
 
 
-    // Find radii for controller dead-zones (circular)
-    double leftRadius = Math.sqrt(Math.pow(leftX, 2) + Math.pow(leftY, 2));
-    double rightRadius = Math.abs(rightX);
+
 
     if (slowMode)
     {

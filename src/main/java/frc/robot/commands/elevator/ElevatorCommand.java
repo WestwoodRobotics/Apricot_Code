@@ -4,26 +4,26 @@
 
 package frc.robot.commands.elevator;
 
-import edu.wpi.first.wpilibj.GenericHID;
+//import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
+//import edu.wpi.first.wpilibj2.command.InstantCommand;
+//import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.subsystems.elevator.ElevatorModule;
 
 
 public class ElevatorCommand extends CommandBase {
   
-  private XboxController controller;
+  //private XboxController controller;
   private XboxController controller2;
   private ElevatorModule elevatorModule;
-  private ElevatorPosSet elevPos;
+  //private ElevatorPosSet elevPos;
 
   //private POVButton dPadUp;
   //private POVButton dPadDown;
 
   public ElevatorCommand(ElevatorModule elevatorModule, XboxController controller, XboxController controller2) {
-    this.controller = controller;
+   // this.controller = controller;
     this.controller2 = controller2;
     this.elevatorModule = elevatorModule;
     //dPadDown = new POVButton(controller2, 0);
