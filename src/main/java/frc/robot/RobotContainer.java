@@ -16,6 +16,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -28,16 +29,16 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.Intake.IntakeCommand;
-import frc.robot.commands.elevator.ElevatorCommand;
-import frc.robot.commands.elevator.ElevatorPosSet;
+//import frc.robot.commands.Intake.IntakeCommand;
+//import frc.robot.commands.elevator.ElevatorCommand;
+//import frc.robot.commands.elevator.ElevatorPosSet;
 import frc.robot.commands.swerve.driveCommand;
-import frc.robot.commands.wrist.WristCommand;
-import frc.robot.commands.wrist.WristPosSet;
-import frc.robot.subsystems.elevator.ElevatorModule;
-import frc.robot.subsystems.intake.IntakeModule;
+//import frc.robot.commands.wrist.WristCommand;
+//import frc.robot.commands.wrist.WristPosSet;
+//import frc.robot.subsystems.elevator.ElevatorModule;
+//import frc.robot.subsystems.intake.IntakeModule;
 import frc.robot.subsystems.swerve.DriveSubsystem;
-import frc.robot.subsystems.wrist.WristModule;
+//import frc.robot.subsystems.wrist.WristModule;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -48,9 +49,9 @@ import frc.robot.subsystems.wrist.WristModule;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  private final IntakeModule m_intakeModule = new IntakeModule();
-  private final ElevatorModule m_elevatorModule = new ElevatorModule();
-  private final WristModule m_wristModule = new WristModule();
+  // private final IntakeModule m_intakeModule = new IntakeModule();
+  // private final ElevatorModule m_elevatorModule = new ElevatorModule();
+  // private final WristModule m_wristModule = new WristModule();
   
 
   // The driver's controller
@@ -83,12 +84,12 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-
+    DriverStation.silenceJoystickConnectionWarning(true);
     // Configure default commands 
     m_robotDrive.setDefaultCommand(new driveCommand(m_robotDrive, m_driverController));
-    m_intakeModule.setDefaultCommand(new IntakeCommand(m_intakeModule, m_driverController, m_operatorController));
-    m_elevatorModule.setDefaultCommand(new ElevatorCommand(m_elevatorModule, m_driverController, m_operatorController));
-    m_wristModule.setDefaultCommand(new WristCommand(m_wristModule, m_driverController, m_operatorController));
+    // m_intakeModule.setDefaultCommand(new IntakeCommand(m_intakeModule, m_driverController, m_operatorController));
+    // m_elevatorModule.setDefaultCommand(new ElevatorCommand(m_elevatorModule, m_driverController, m_operatorController));
+    // m_wristModule.setDefaultCommand(new WristCommand(m_wristModule, m_driverController, m_operatorController));
 
   }
 
@@ -119,19 +120,19 @@ public class RobotContainer {
     // dPadLeft.whileTrue(new InstantCommand(() -> m_wristModule.setArmPower(-0.25)));
     // dPadRight.whileTrue(new InstantCommand(() -> m_wristModule.setArmPower(0.25)));
 
-    leftBumper.onTrue(new ElevatorPosSet(m_elevatorModule, "cube_pickup")
-              .andThen(new WristPosSet(m_wristModule, "cube_pickup")));
-    rightBumper.onTrue(new ElevatorPosSet(m_elevatorModule, "cone_pickup")
-              .andThen(new WristPosSet(m_wristModule, "cone_pickup")));
+    // leftBumper.onTrue(new ElevatorPosSet(m_elevatorModule, "cube_pickup")
+    //           .andThen(new WristPosSet(m_wristModule, "cube_pickup")));
+    // rightBumper.onTrue(new ElevatorPosSet(m_elevatorModule, "cone_pickup")
+    //           .andThen(new WristPosSet(m_wristModule, "cone_pickup")));
 
-    aButton.onTrue(new ElevatorPosSet(m_elevatorModule, "cube_pickup")
-              .andThen(new WristPosSet(m_wristModule, "cube_high")));
-    yButton.onTrue(new ElevatorPosSet(m_elevatorModule, "elevator_init")
-              .andThen(new WristPosSet(m_wristModule, "cone_high/cube_mid")));
-    bButton.onTrue(new ElevatorPosSet(m_elevatorModule, "elevator_init")
-              .andThen(new WristPosSet(m_wristModule, "cube_high")));
-    xButton.onTrue(new ElevatorPosSet(m_elevatorModule, "elevator_init")
-              .andThen(new WristPosSet(m_wristModule, "cube_high")));
+    // aButton.onTrue(new ElevatorPosSet(m_elevatorModule, "cube_pickup")
+    //           .andThen(new WristPosSet(m_wristModule, "cube_high")));
+    // yButton.onTrue(new ElevatorPosSet(m_elevatorModule, "elevator_init")
+    //           .andThen(new WristPosSet(m_wristModule, "cone_high/cube_mid")));
+    // bButton.onTrue(new ElevatorPosSet(m_elevatorModule, "elevator_init")
+    //           .andThen(new WristPosSet(m_wristModule, "cube_high")));
+    // xButton.onTrue(new ElevatorPosSet(m_elevatorModule, "elevator_init")
+    //           .andThen(new WristPosSet(m_wristModule, "cube_high")));
 
 
     //a2Button.onTrue(new ElevatorPosSet(m_elevatorModule, "home/low_cube")
