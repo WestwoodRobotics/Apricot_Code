@@ -48,9 +48,19 @@ public final class Constants {
     // Angular offsets of the modules relative to the chassis in radians
     public static final double kFrontLeftChassisAngularOffset = -Math.PI / 2;
     public static final double kFrontRightChassisAngularOffset = 0;
-    public static final double kBackLeftChassisAngularOffset = Math.PI;
-    public static final double kBackRightChassisAngularOffset = Math.PI / 2;
+    public static final double kRearLeftChassisAngularOffset = Math.PI;
+    public static final double kRearRightChassisAngularOffset = Math.PI / 2;
 
+    // SPARK MAX CAN IDs
+    public static final int kFrontLeftDrivingCanId = 11;
+    public static final int kRearLeftDrivingCanId = 17;
+    public static final int kFrontRightDrivingCanId = 13;
+    public static final int kRearRightDrivingCanId = 15;
+
+    public static final int kFrontLeftTurningCanId = 10;
+    public static final int kRearLeftTurningCanId = 16;
+    public static final int kFrontRightTurningCanId = 12;
+    public static final int kRearRightTurningCanId = 14;
 
     public static final boolean kGyroReversed = false;
 
@@ -132,7 +142,10 @@ public final class Constants {
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
-    public static final double kDriveDeadband = 0.05;
+    public static final int kOperatorControllerPort = 1;
+    public static final int phoenixGyroPort = 0; //TODO: Check if this is correct
+    public static final double kDriveDeadband = 0.2;
+
   }
 
   public static final class AutoConstants {
@@ -153,4 +166,37 @@ public final class Constants {
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
   }
+  public static final class ElevatorConstants {
+    public static final int kElevatorMotor = 20;
+    public static double kP = 0;
+    public static double kI = 0;
+    public static double kD = 0;
+
+    public static int elev_cube_pickup = 0;
+    public static int elev_cone_pickup = 2;
+    public static int elev_outtake = 90;
+
+    
+  }
+  public static final class IntakeConstants {
+    public static final int kIntakeMotor = 22;
+
+  }
+  public static final class ArmConstants{
+    public static final int kArmMotor = 21;
+
+    public static double kP = 0;
+    public static double kI = 0;
+    public static double kD = 0;
+
+    public static int arm_cube_pickup = 70; //also arm cone high and mid cube outtake
+    public static int arm_cone_pickup = 100; //also arm cone mid outtake
+    public static int arm_cube_outtake = 0; //refers to high and low outtake
+
+
+
+  }
+
+
+
 }

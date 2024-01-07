@@ -12,7 +12,7 @@ public class DriveSpeed {
   }
 
   public double[] compute(double controlX, double controlY) {
-    double distance = Math.sqrt(Math.pow(controlX, 2) + Math.pow(controlY, 2));
+    double distance = Math.sqrt(Math.pow(controlX, 2) + Math.pow(controlY, 2)); //Pyhthagorean Theorem
     double angle = Math.atan2(controlY, controlX);
 
     // if distance is 0, start decreasing the speed by the brake speed

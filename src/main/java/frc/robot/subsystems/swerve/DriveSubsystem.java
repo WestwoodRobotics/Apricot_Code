@@ -4,9 +4,10 @@
 
 package frc.robot.subsystems.swerve;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import edu.wpi.first.math.MathUtil;
+
+//import com.kauailabs.navx.frc.AHRS;
+//import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -17,38 +18,46 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
-import edu.wpi.first.wpilibj.ADIS16470_IMU;
+// import edu.wpi.first.wpilibj.ADIS16470_IMU;
+// import edu.wpi.first.wpilibj.SPI;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.PortConstants;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+
 public class DriveSubsystem extends SubsystemBase {
+  private Gyro gyro;
   // Create MAXSwerveModules
   private final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
-      PortConstants.kFrontRightDrivingCanId,
-      PortConstants.kFrontRightTurningCanId,
-      DriveConstants.kFrontRightChassisAngularOffset);
-
-  private final MAXSwerveModule m_frontRight = new MAXSwerveModule(
-      PortConstants.kFrontLeftDrivingCanId,
-      PortConstants.kFrontLeftTurningCanId,
+      DriveConstants.kFrontLeftDrivingCanId,
+      DriveConstants.kFrontLeftTurningCanId,
       DriveConstants.kFrontLeftChassisAngularOffset);
 
+  private final MAXSwerveModule m_frontRight = new MAXSwerveModule(
+      DriveConstants.kFrontRightDrivingCanId,
+      DriveConstants.kFrontRightTurningCanId,
+      DriveConstants.kFrontRightChassisAngularOffset);
+
   private final MAXSwerveModule m_rearLeft = new MAXSwerveModule(
-      PortConstants.kRearRightDrivingCanId,
-      PortConstants.kRearRightTurningCanId,
-      DriveConstants.kBackRightChassisAngularOffset);
+      DriveConstants.kRearLeftDrivingCanId,
+      DriveConstants.kRearLeftTurningCanId,
+      DriveConstants.kRearLeftChassisAngularOffset);
 
   private final MAXSwerveModule m_rearRight = new MAXSwerveModule(
-      PortConstants.kRearLeftDrivingCanId,
-      PortConstants.kRearLeftTurningCanId,
-      DriveConstants.kBackLeftChassisAngularOffset);
+      DriveConstants.kRearRightDrivingCanId,
+      DriveConstants.kRearRightTurningCanId,
+      DriveConstants.kRearRightChassisAngularOffset);
 
   // The gyro sensor
-  private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
 
-  
+  // public static final AHRS gyro = new AHRS(SPI.Port.kMXP); //NAVXMP v1 Initialization
+
+  //Instangiate a CTRE Pigeon Gyro
+
+
   private double m_currentRotation = 0.0;
   private double m_currentTranslationDir = 0.0;
   private double m_currentTranslationMag = 0.0;
@@ -64,7 +73,7 @@ public class DriveSubsystem extends SubsystemBase {
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
       DriveConstants.kDriveKinematics,
-      Rotation2d.fromDegrees(m_gyro.getAngle()),
+      this.getHeadingObject(),
       new SwerveModulePosition[] {
           m_frontLeft.getPosition(),
           m_frontRight.getPosition(),
@@ -72,21 +81,28 @@ public class DriveSubsystem extends SubsystemBase {
           m_rearRight.getPosition()
       });
 
-  /** Creates a new DriveSubsystem. */
+ /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
+    try {
+      gyro = new Gyro();
+    } catch (NullPointerException e) {
+      System.out.println("Warning: Gyro not responding. Skipping gyro initialization.");
+      gyro = null;
+    }      
   }
 
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
     m_odometry.update(
-        Rotation2d.fromDegrees(m_gyro.getAngle()),
+        Rotation2d.fromDegrees(gyro.getAngle()),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
+        SmartDashboard.putNumber("Gyro Angle", gyro.getAngle());
   }
 
   /**
@@ -98,6 +114,15 @@ public class DriveSubsystem extends SubsystemBase {
     return m_odometry.getPoseMeters();
   }
 
+  public void resetGyro(){
+    if (gyro != null) {
+      gyro.resetYaw();
+      System.out.println("RESET GYRO!");
+    } else {
+      System.out.println("Warning: Gyro not responding. Skipping gyro reset.");
+    }
+  }
+
   /**
    * Resets the odometry to the specified pose.
    *
@@ -105,7 +130,7 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void resetOdometry(Pose2d pose) {
     m_odometry.resetPosition(
-        Rotation2d.fromDegrees(m_gyro.getAngle()),
+        this.getHeadingObject(),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
@@ -171,7 +196,6 @@ public class DriveSubsystem extends SubsystemBase {
       ySpeedCommanded = m_currentTranslationMag * Math.sin(m_currentTranslationDir);
       m_currentRotation = m_rotLimiter.calculate(rot);
 
-
     } else {
       xSpeedCommanded = xSpeed;
       ySpeedCommanded = ySpeed;
@@ -183,9 +207,9 @@ public class DriveSubsystem extends SubsystemBase {
     double ySpeedDelivered = ySpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
     double rotDelivered = m_currentRotation * DriveConstants.kMaxAngularSpeed;
 
-    var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
+    SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(m_gyro.getAngle()))
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(gyro.getAngle()))
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
@@ -195,6 +219,21 @@ public class DriveSubsystem extends SubsystemBase {
     m_rearRight.setDesiredState(swerveModuleStates[3]);
   }
 
+
+public void TriggerDrive(double triggerValue, double leftJoystickX, double leftJoystickY, double rightJoystickRotation, boolean fieldRelative, boolean rateLimit) {
+    // Normalize the trigger value to be between 0 and 1
+    double normalizedTriggerValue = MathUtil.clamp(triggerValue, 0, 1);
+
+    // Use the left joystick X and Y values for the speed (xSpeed and ySpeed)
+    double xSpeed = normalizedTriggerValue * leftJoystickX;
+    double ySpeed = normalizedTriggerValue * leftJoystickY;
+
+    // Use the right joystick for rotation
+    double rot = rightJoystickRotation;
+
+    // Call the existing drive method with these values
+    drive(xSpeed, ySpeed, rot, fieldRelative, rateLimit);
+ }
   /**
    * Sets the wheels into an X formation to prevent movement.
    */
@@ -228,9 +267,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   /** Zeroes the heading of the robot. */
-  public void zeroHeading() {
-    m_gyro.reset();
-  }
+
 
   /**
    * Returns the heading of the robot.
@@ -238,8 +275,25 @@ public class DriveSubsystem extends SubsystemBase {
    * @return the robot's heading in degrees, from -180 to 180
    */
   public double getHeading() {
-    return Rotation2d.fromDegrees(m_gyro.getAngle()).getDegrees();
+    if (gyro != null) {
+      return (Rotation2d.fromDegrees(gyro.getAngle()).getDegrees());
+    } else {
+      System.out.println("Warning: Gyro not responding. Returning default heading.");
+      return 0.0; // Return a default value
+    }
+
   }
+
+  public Rotation2d getHeadingObject() {
+    if (gyro != null) {
+      return (Rotation2d.fromDegrees(gyro.getAngle()));
+    } else {
+      System.out.println("Warning: Gyro not responding. Returning default heading.");
+      return Rotation2d.fromDegrees(0); // Return a default value
+    }
+
+  }
+
 
   /**
    * Returns the turn rate of the robot.
@@ -247,36 +301,19 @@ public class DriveSubsystem extends SubsystemBase {
    * @return The turn rate of the robot, in degrees per second
    */
   public double getTurnRate() {
-    return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
-  }
-  
-  public void writeEncoderPositionsToFile(String filename) {
-    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-      // Write the encoder positions for each module
-      writer.write("Front Left Drive Encoder Position: " + m_frontLeft.getDriveEncoderPosition());
-      writer.newLine();
-      writer.write("Front Left Turning Encoder Position: " + m_frontLeft.getTurningEncoderPosition());
-      writer.newLine();
-      writer.write("Front Right Drive Encoder Position: " + m_frontRight.getDriveEncoderPosition());
-      writer.newLine();
-      writer.write("Front Right Turning Encoder Position: " + m_frontRight.getTurningEncoderPosition());
-      writer.newLine();
-      writer.write("Rear Left Drive Encoder Position: " + m_rearLeft.getDriveEncoderPosition());
-      writer.newLine();
-      writer.write("Rear Left Turning Encoder Position: " + m_rearLeft.getTurningEncoderPosition());
-      writer.newLine();
-      writer.write("Rear Right Drive Encoder Position: " + m_rearRight.getDriveEncoderPosition());
-      writer.newLine();
-      writer.write("Rear Right Turning Encoder Position: " + m_rearRight.getTurningEncoderPosition());
-      writer.newLine();
-
-      // Flush and close the writer
-      writer.flush();
-      writer.close();
-
-      System.out.println("Encoder positions written to file: " + filename);
-    } catch (IOException e) {
-      System.err.println("Error writing encoder positions to file: " + e.getMessage());
+    if (gyro != null) {
+      return gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+    } else {
+      System.out.println("Warning: Gyro not responding. Returning default turn rate.");
+      return 0.0; // Return a default value
     }
- }
+
+  }
+  public void recalibrateGyro() {
+    if (gyro != null) {
+      gyro.calibrate();
+    } else {
+      System.out.println("Warning: Gyro not responding. Skipping gyro recalibration.");
+    }
+  }
 }
