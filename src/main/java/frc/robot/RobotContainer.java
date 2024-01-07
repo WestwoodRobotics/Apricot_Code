@@ -47,11 +47,6 @@ import frc.robot.subsystems.swerve.DriveSubsystem;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The driver's controller
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-
-  private final JoystickButton rightBumper = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
-  private final JoystickButton leftBumper = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   // private final IntakeModule m_intakeModule = new IntakeModule();

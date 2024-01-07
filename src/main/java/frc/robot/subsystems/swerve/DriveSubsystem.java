@@ -23,7 +23,6 @@ import edu.wpi.first.util.WPIUtilJNI;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.PortConstants;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
