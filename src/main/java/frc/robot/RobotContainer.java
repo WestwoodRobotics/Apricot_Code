@@ -39,6 +39,7 @@ import frc.robot.commands.swerve.driveCommand;
 //import frc.robot.subsystems.intake.IntakeModule;
 import frc.robot.subsystems.swerve.DriveSubsystem;
 //import frc.robot.subsystems.wrist.WristModule;
+import frc.robot.subsystems.test.Test;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -49,6 +50,7 @@ import frc.robot.subsystems.swerve.DriveSubsystem;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final Test test = new Test();
   // private final IntakeModule m_intakeModule = new IntakeModule();
   // private final ElevatorModule m_elevatorModule = new ElevatorModule();
   // private final WristModule m_wristModule = new WristModule();
@@ -87,6 +89,7 @@ public class RobotContainer {
     DriverStation.silenceJoystickConnectionWarning(true);
     // Configure default commands 
     m_robotDrive.setDefaultCommand(new driveCommand(m_robotDrive, m_driverController));
+    test.setDefaultCommand(new driveCommand(m_robotDrive, m_driverController));
     // m_intakeModule.setDefaultCommand(new IntakeCommand(m_intakeModule, m_driverController, m_operatorController));
     // m_elevatorModule.setDefaultCommand(new ElevatorCommand(m_elevatorModule, m_driverController, m_operatorController));
     // m_wristModule.setDefaultCommand(new WristCommand(m_wristModule, m_driverController, m_operatorController));
