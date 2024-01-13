@@ -22,17 +22,20 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-
+import frc.robot.commands.LED.LEDCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 //import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.PortConstants;
 //import frc.robot.commands.Intake.IntakeCommand;
 //import frc.robot.commands.elevator.ElevatorCommand;
 //import frc.robot.commands.elevator.ElevatorPosSet;
 import frc.robot.commands.swerve.driveCommand;
+import frc.robot.commands.test.testCommand;
+import frc.robot.subsystems.LED.LED;
 //import frc.robot.commands.wrist.WristCommand;
 //import frc.robot.commands.wrist.WristPosSet;
 //import frc.robot.subsystems.elevator.ElevatorModule;
@@ -51,6 +54,7 @@ public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final Test test = new Test();
+  private final LED m_led = new LED(PortConstants.kLEDPort, PortConstants.kLEDLength);
   // private final IntakeModule m_intakeModule = new IntakeModule();
   // private final ElevatorModule m_elevatorModule = new ElevatorModule();
   // private final WristModule m_wristModule = new WristModule();
@@ -89,7 +93,8 @@ public class RobotContainer {
     DriverStation.silenceJoystickConnectionWarning(true);
     // Configure default commands 
     m_robotDrive.setDefaultCommand(new driveCommand(m_robotDrive, m_driverController));
-    test.setDefaultCommand(new driveCommand(m_robotDrive, m_driverController));
+    test.setDefaultCommand(new testCommand(test, m_driverController));
+    m_led.setDefaultCommand(new LEDCommand(m_led, PortConstants.kLimitSwitchPort));
     // m_intakeModule.setDefaultCommand(new IntakeCommand(m_intakeModule, m_driverController, m_operatorController));
     // m_elevatorModule.setDefaultCommand(new ElevatorCommand(m_elevatorModule, m_driverController, m_operatorController));
     // m_wristModule.setDefaultCommand(new WristCommand(m_wristModule, m_driverController, m_operatorController));
