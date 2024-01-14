@@ -4,7 +4,9 @@
 
 package frc.robot;
 
-import com.revrobotics.CANSparkMax.IdleMode;
+
+import com.revrobotics.CANSparkBase.IdleMode;
+
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -124,10 +126,10 @@ public final class Constants {
     public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
     public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
 
-    public static final double kDrivingP = 0.04;
-    public static final double kDrivingI = 1;
-    public static final double kDrivingD = 1;
-    public static final double kDrivingFF = 1 / kDriveWheelFreeSpeedRps;
+    public static final double kDrivingP = 0.04; //TODO: Tune these values
+    public static final double kDrivingI = 1; //TODO: Tune these values
+    public static final double kDrivingD = 1; //TODO: Tune these values
+    public static final double kDrivingFF = 1 / kDriveWheelFreeSpeedRps; //TODO: Tune these values
     public static final double kDrivingMinOutput = -1;
     public static final double kDrivingMaxOutput = 1;
 

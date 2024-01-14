@@ -1,10 +1,11 @@
 
-    package frc.robot.subsystems;
+package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.CANSparkBase.*;
 
-import com.revrobotics.SparkMaxPIDController.ArbFFUnits;
+
+import com.revrobotics.SparkPIDController.ArbFFUnits;
 
 
 
