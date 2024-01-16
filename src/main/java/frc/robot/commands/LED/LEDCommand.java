@@ -1,9 +1,8 @@
 package frc.robot.commands.LED;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.vision.LED;
 import edu.wpi.first.wpilibj.DigitalInput;
-import frc.robot.subsystems.LED.LED;
-
 import edu.wpi.first.wpilibj.DigitalInput;
 
 public class LEDCommand extends CommandBase {

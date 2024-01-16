@@ -39,8 +39,6 @@ public class MotorControlGroup {
         }
     }
 
-
-
     // Sets the position of all motors in the group to the given value, with the given feedforward value
     public void setPosition(double position, float ff) {
         for (CANSparkMax motor : motors) {
@@ -57,8 +55,6 @@ public class MotorControlGroup {
     public void setInverted(boolean inverted, int motorIndex){
         motors[motorIndex].setInverted(inverted);
     }
-
-    
     
     // Returns the power of the first motor in the group (all motors should be the same)
     public double getPower() {
@@ -68,6 +64,46 @@ public class MotorControlGroup {
     // Returns the position of the first motor in the group (all motors should be the same)
     public double getPosition() {
         return motors[0].getEncoder().getPosition();
+    }
+
+    public void setRampRate(double rate) {
+        for (CANSparkMax motor : motors) {
+            motor.setOpenLoopRampRate(rate);
+            motor.setClosedLoopRampRate(rate);
+        }
+    }
+
+    public double getAverageTemperature() {
+        double totalTemp = 0.0;
+        for (CANSparkMax motor : motors) {
+            totalTemp += motor.getMotorTemperature();
+        }
+        return totalTemp / motors.length;
+    }
+
+    public double getAverageBusVoltage() {
+        double totalVoltage = 0.0;
+        for (CANSparkMax motor : motors) {
+            totalVoltage += motor.getBusVoltage();
+        }
+        return totalVoltage / motors.length;
+    }
+
+    public double getAverageOutputCurrent() {
+        double totalCurrent = 0.0;
+        for (CANSparkMax motor : motors) {
+            totalCurrent += motor.getOutputCurrent();
+        }
+        return totalCurrent / motors.length;
+    }
+
+    public boolean anyFaults() {
+        for (CANSparkMax motor : motors) {
+            if (motor.getFaults() > 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

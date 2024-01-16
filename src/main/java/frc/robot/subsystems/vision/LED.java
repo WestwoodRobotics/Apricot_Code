@@ -1,4 +1,4 @@
-package frc.robot.subsystems.LED;
+package frc.robot.subsystems.vision;
 
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;

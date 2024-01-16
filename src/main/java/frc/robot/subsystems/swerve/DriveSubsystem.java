@@ -94,14 +94,14 @@ public class DriveSubsystem extends SubsystemBase {
   public void periodic() {
     // Update the odometry in the periodic block
     m_odometry.update(
-        Rotation2d.fromDegrees(gyro.getAngle()),
+        Rotation2d.fromDegrees(gyro.getRawYaw()),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
-        SmartDashboard.putNumber("Gyro Angle", gyro.getAngle());
+        SmartDashboard.putNumber("Gyro Angle", gyro.getRawYaw());
   }
 
   /**
@@ -115,7 +115,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void resetGyro(){
     if (gyro != null) {
-      gyro.resetYaw();
+      gyro.reset();
       System.out.println("RESET GYRO!");
     } else {
       System.out.println("Warning: Gyro not responding. Skipping gyro reset.");
@@ -208,7 +208,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(gyro.getAngle()))
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(gyro.getRawYaw()))
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
@@ -275,7 +275,7 @@ public void TriggerDrive(double triggerValue, double leftJoystickX, double leftJ
    */
   public double getHeading() {
     if (gyro != null) {
-      return (Rotation2d.fromDegrees(gyro.getAngle()).getDegrees());
+      return (Rotation2d.fromDegrees(gyro.getRawYaw()).getDegrees());
     } else {
       System.out.println("Warning: Gyro not responding. Returning default heading.");
       return 0.0; // Return a default value
@@ -285,7 +285,7 @@ public void TriggerDrive(double triggerValue, double leftJoystickX, double leftJ
 
   public Rotation2d getHeadingObject() {
     if (gyro != null) {
-      return (Rotation2d.fromDegrees(gyro.getAngle()));
+      return (Rotation2d.fromDegrees(gyro.getRawYaw()));
     } else {
       System.out.println("Warning: Gyro not responding. Returning default heading.");
       return Rotation2d.fromDegrees(0); // Return a default value
@@ -301,7 +301,7 @@ public void TriggerDrive(double triggerValue, double leftJoystickX, double leftJ
    */
   public double getTurnRate() {
     if (gyro != null) {
-      return gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+      return gyro.getYawRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
     } else {
       System.out.println("Warning: Gyro not responding. Returning default turn rate.");
       return 0.0; // Return a default value
@@ -310,7 +310,7 @@ public void TriggerDrive(double triggerValue, double leftJoystickX, double leftJ
   }
   public void recalibrateGyro() {
     if (gyro != null) {
-      gyro.calibrate();
+      gyro.reset();
     } else {
       System.out.println("Warning: Gyro not responding. Skipping gyro recalibration.");
     }
