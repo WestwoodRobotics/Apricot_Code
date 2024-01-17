@@ -44,26 +44,30 @@ public class driveCommand extends CommandBase {
     rightX = -MathUtil.applyDeadband(controller.getRightX(), OIConstants.kDriveDeadband);
     rightY = -MathUtil.applyDeadband(controller.getRightY(), OIConstants.kDriveDeadband);
 
+    // Apply the non-linear transformation to smooth out the input
+    leftX = Math.copySign(Math.pow(leftX, 2), leftX);
+    leftY = Math.copySign(Math.pow(leftY, 2), leftY);
+    rightX = Math.copySign(Math.pow(rightX, 2), rightX);
+    rightY = Math.copySign(Math.pow(rightY, 2), rightY);
+
     if (slowMode) {
       leftX *= Constants.DriveConstants.slowModeMultiplier;
       leftY *= Constants.DriveConstants.slowModeMultiplier;
       rightX *= Constants.DriveConstants.slowModeMultiplier;
     }
 
-
     // Use the trigger value for speed
     double triggerValue = MathUtil.clamp(controller.getRightTriggerAxis(), 0, 1);
 
     if (YuMode){
-       m_swerveDrive.drive(rightY, rightX, leftX, false, true);
+      m_swerveDrive.drive(rightY, rightX, leftX, false, true);
       //m_swerveDrive.drive(triggerValue,rightX, rightY, leftX, true, true);
     }
     else{
-       m_swerveDrive.drive(leftY, leftX, rightX, false, true);
+      m_swerveDrive.drive(leftY, leftX, rightX, false, true);
       //m_swerveDrive.drive(triggerValue,leftX, leftY, rightX, true, true);
     }
   }
-
   @Override
   public void end(boolean interrupted) {}
 
