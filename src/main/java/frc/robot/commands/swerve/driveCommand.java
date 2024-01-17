@@ -55,12 +55,12 @@ public class driveCommand extends CommandBase {
     double triggerValue = MathUtil.clamp(controller.getRightTriggerAxis(), 0, 1);
 
     if (YuMode){
-      // m_swerveDrive.drive(rightY, rightX, leftX, true, true);
-      m_swerveDrive.TriggerDrive(triggerValue,rightX, rightY, leftX, true, true);
+       m_swerveDrive.drive(rightY, rightX, leftX, false, true);
+      //m_swerveDrive.drive(triggerValue,rightX, rightY, leftX, true, true);
     }
     else{
-      // m_swerveDrive.drive(leftY, leftX, rightX, true, true);
-      m_swerveDrive.TriggerDrive(triggerValue,leftX, leftY, rightX, true, true);
+       m_swerveDrive.drive(leftY, leftX, rightX, false, true);
+      //m_swerveDrive.drive(triggerValue,leftX, leftY, rightX, true, true);
     }
   }
 
