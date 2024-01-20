@@ -18,8 +18,7 @@ public class Gyro extends SubsystemBase {
   public ADIS16470_IMU_Better gyro;
 
   public Rotation2d yawOffset = new Rotation2d(0);
-  public Rotation2d pitchOffset = new Rotation2d(0);
-  public Rotation2d rollOffset = new Rotation2d(0);
+
 
   /**
    * Creates a new Gyro, which is a wrapper for the ADIS16740 IMU and stores an offset so we don't
@@ -36,8 +35,6 @@ public class Gyro extends SubsystemBase {
   public void zeroGyro() {
     setGyroYawOffset(0);
   }
-
-
 
   public void setGyroYawOffset(double degrees) {
     yawOffset = getRawRot2dYaw().minus(Rotation2d.fromDegrees(degrees));

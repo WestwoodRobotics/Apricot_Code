@@ -182,10 +182,10 @@ public final class Constants {
     public static double kP = 0;
     public static double kI = 0;
     public static double kD = 0;
+    public static double ff = 0;
 
-    public static int elev_cube_pickup = 0;
-    public static int elev_cone_pickup = 2;
-    public static int elev_outtake = 90;
+    public static int elevatorClimbInit = 0; //TODO: Change this value
+    public static int elevatorClimbHome = 0; //TODO: Change this value
 
     
   }
