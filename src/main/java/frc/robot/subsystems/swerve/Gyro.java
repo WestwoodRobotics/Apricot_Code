@@ -5,20 +5,17 @@ package frc.robot.subsystems.swerve;
 
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.ADIS16470_IMU;
 
 
 import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.sensors.ADIS16470_IMU_Better;
 
 
 public class Gyro extends SubsystemBase {
 
-  public ADIS16470_IMU gyro;
-  public IMUAxis pitchAxis;
-  public IMUAxis rollAxis;
-  public IMUAxis yawAxis;
+  public ADIS16470_IMU_Better gyro;
 
   public Rotation2d yawOffset = new Rotation2d(0);
   public Rotation2d pitchOffset = new Rotation2d(0);
@@ -29,8 +26,7 @@ public class Gyro extends SubsystemBase {
    * have to directly zero the gyro
    */
   public Gyro() {
-    gyro = new ADIS16470_IMU();
-    yawAxis = gyro.getYawAxis();
+    gyro = new ADIS16470_IMU_Better();
     zeroGyro();
   }
 
@@ -52,27 +48,28 @@ public class Gyro extends SubsystemBase {
   }
 
   public Rotation2d getRawRot2dYaw() {
-    return Rotation2d.fromDegrees(gyro.getAngle());
+    return Rotation2d.fromDegrees(gyro.getXAngle());
   }
 
-  public double getRawYaw(){
-    return gyro.getAngle();
+  public double getXAngle(){
+    return gyro.getXAngle();
+  }
+
+  public double getYAngle(){
+    return gyro.getYAngle();
+  }
+
+  public double getZAngle(){
+    return gyro.getZAngle();
   }
 
   public void resetYaw(){
     gyro.reset();
   }
   
-  public double getYawRate(){
-    return gyro.getRate();
+  public double getZRate(){
+    return gyro.getZAngularRate();
   }
-
-
-
- 
-
-
-
 
   public void reset(){
     this.resetYaw();
