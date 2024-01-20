@@ -40,7 +40,7 @@ public class MotorControlGroup {
     }
 
     // Sets the position of all motors in the group to the given value, with the given feedforward value
-    public void setPosition(double position, float ff) {
+    public void setPosition(int position, double ff) {
         for (CANSparkMax motor : motors) {
             motor.getPIDController().setReference(position, ControlType.kPosition, 0, ff, ArbFFUnits.kPercentOut);
         }
