@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 //import constants.java
 import frc.robot.Constants.*;
 import frc.robot.subsystems.MotorControlGroup;
+import frc.utils.Position_Enums.ElevatorPositions;
 
 
 
@@ -23,7 +24,11 @@ public class Elevator extends SubsystemBase {
     }
 
     public void setPosition(ElevatorPositions climbInit) {
-        motor.setPosition(climbInit.getPosition(), ElevatorConstants.ff);
+        if (climbInit == ElevatorPositions.CLIMB_INIT) {
+            motor.setPosition(ElevatorConstants.elevatorClimbInit, ElevatorConstants.ff);
+        } else if (climbInit == ElevatorPositions.CLIMB_HOME) {
+            motor.setPosition(ElevatorConstants.elevatorClimbHome, ElevatorConstants.ff);
+        }
     }
 
     public double getPosition() {

@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.swerve.DriveSubsystem;
+import frc.utils.Position_Enums.ElevatorPositions;
 import frc.robot.subsystems.elevator.*;
 import edu.wpi.first.wpilibj.XboxController;
 
@@ -30,11 +31,11 @@ public class elevatorCommand extends CommandBase {
   @Override
   public void execute() {
     //Use controller buttons (A, B, X, Y) to set elevator position
-    if (controller.getAButtonPressed()) {
+    if (controller.getXButtonPressed()) {
       m_Elevator.setPosition(ElevatorPositions.CLIMB_INIT);
     }
     if (controller.getBButtonPressed()) {
-      m_Elevator.setPosition(ElevatorPositions.CLIMB_END);
+      m_Elevator.setPosition(ElevatorPositions.CLIMB_HOME);
     }
 
   }
