@@ -38,9 +38,7 @@ public class driveCommand extends CommandBase {
     if (controller.getStartButton()) {
       YuMode= !YuMode;
     }
-    if (controller.getAButton()){
-      m_swerveDrive.resetGyro();
-    }
+
 
     leftX = -MathUtil.applyDeadband(controller.getLeftX(), OIConstants.kDriveDeadband);
     leftY = -MathUtil.applyDeadband(controller.getLeftY(), OIConstants.kDriveDeadband);
@@ -63,10 +61,10 @@ public class driveCommand extends CommandBase {
     double triggerValue = MathUtil.clamp(controller.getRightTriggerAxis(), 0, 1);
 
     if ((YuMode) && (((rightX != 0) || (rightY != 0) || (leftX != 0)))){
-      m_swerveDrive.drive(rightY, rightX, leftX, true, true);
+      m_swerveDrive.drive(rightY, rightX, leftX, true, false);
     }
     else if ((leftX != 0) || (leftY != 0) || (rightX != 0)){
-      m_swerveDrive.drive(leftY, leftX, rightX, true, true);
+      m_swerveDrive.drive(leftY, leftX, rightX, true, false);
       //m_swerveDrive.drive(triggerValue,leftX, leftY, rightX, true, true);
     }
     else{

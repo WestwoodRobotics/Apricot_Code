@@ -36,6 +36,6 @@ public class LEDCommand extends CommandBase {
     @Override
     public boolean isFinished() {
         // This command finishes immediately, but you can change this to suit your needs
-        return false;
+        return true;
     }
 }

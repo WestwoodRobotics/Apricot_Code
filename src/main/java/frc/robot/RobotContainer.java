@@ -5,6 +5,7 @@
 
 package frc.robot;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +54,8 @@ import frc.robot.subsystems.vision.LED;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  private final Test test = new Test();
+  //private final Test test = new Test();
+
   private final LED m_led = new LED(PortConstants.kLEDPort, PortConstants.kLEDLength);
   // private final IntakeModule m_intakeModule = new IntakeModule();
   // private final ElevatorModule m_elevatorModule = new ElevatorModule();
@@ -93,7 +95,7 @@ public class RobotContainer {
     DriverStation.silenceJoystickConnectionWarning(true);
     // Configure default commands 
     m_robotDrive.setDefaultCommand(new driveCommand(m_robotDrive, m_driverController));
-    test.setDefaultCommand(new testCommand(test, m_driverController));
+    //test.setDefaultCommand(new testCommand(test, m_driverController));
     m_led.setDefaultCommand(new LEDCommand(m_led, PortConstants.kLimitSwitchPort));
     // m_intakeModule.setDefaultCommand(new IntakeCommand(m_intakeModule, m_driverController, m_operatorController));
     // m_elevatorModule.setDefaultCommand(new ElevatorCommand(m_elevatorModule, m_driverController, m_operatorController));
@@ -163,35 +165,20 @@ public class RobotContainer {
         // Add kinematics to ensure max speed is actually obeyed
         .setKinematics(DriveConstants.kDriveKinematics);
 
-    // Get points from Smart Dashboard
-    // Get number of waypoints from Smart Dashboard
-    int numberOfWaypoints = (int) SmartDashboard.getNumber("Number of Waypoints", 0);
 
-    // Get points from Smart Dashboard
-    List<Translation2d> interiorWaypoints = new ArrayList<>();
-    for (int i = 0; i < numberOfWaypoints; i++) {
-        double x = SmartDashboard.getNumber("Waypoint " + i + " X", 0);
-        double y = SmartDashboard.getNumber("Waypoint " + i + " Y", 0);
-        interiorWaypoints.add(new Translation2d(x, y));
-    }
+    // Define points directly
+    ArrayList<Pose2d> allWaypoints = new ArrayList<>();
+    allWaypoints.add(new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))));
+    allWaypoints.add(new Pose2d(1, 0, new Rotation2d(Math.toRadians(0))));
+    allWaypoints.add(new Pose2d(-1, 6, new Rotation2d(Math.toRadians(0))));
 
-    // Generate trajectory
-    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-        // Start at the origin facing the +X direction
-        new Pose2d(0, 0, new Rotation2d(0.0)),
-        // Pass through the interior waypoints
-        interiorWaypoints,
-        // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(0, 0, new Rotation2d(0.01)),
-        config);
-
-
-
- 
+    
+    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(allWaypoints, config);
 
     var thetaController = new ProfiledPIDController(
         AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
 
     SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
         exampleTrajectory,
