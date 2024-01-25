@@ -51,10 +51,7 @@ def includeDesktopSupport = true
 dependencies {
     implementation wpi.java.deps.wpilib()
     implementation wpi.java.vendor.java()
-    implementation 'com.kauailabs.navx.frc:navx-java:+'
-    implementation 'com.ctre.phoenix:api-java:5.30.4'
-    implementation 'com.ctre.phoenix:wpiapi-java:5.30.4'
-    implementation 'com.ctre.phoenixpro:wpiapi-java:23.0.8'
+
     
 
 
