@@ -38,6 +38,9 @@ public class driveCommand extends CommandBase {
     if (controller.getStartButton()) {
       YuMode= !YuMode;
     }
+    if (controller.getAButton()){
+      m_swerveDrive.resetGyro();
+    }
 
 
     leftX = -MathUtil.applyDeadband(controller.getLeftX(), OIConstants.kDriveDeadband);

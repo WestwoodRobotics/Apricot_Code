@@ -88,6 +88,11 @@ public class DriveSubsystem extends SubsystemBase {
       System.out.println("Warning: Gyro not responding. Skipping gyro initialization.");
       gyro = null;
     }      
+
+    //reset the gyro if it isn't null
+    if (gyro != null) {
+      gyro.reset();
+    }
   }
 
   @Override

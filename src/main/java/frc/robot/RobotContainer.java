@@ -170,7 +170,7 @@ public class RobotContainer {
     ArrayList<Pose2d> allWaypoints = new ArrayList<>();
     allWaypoints.add(new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))));
     allWaypoints.add(new Pose2d(1, 0, new Rotation2d(Math.toRadians(0))));
-    allWaypoints.add(new Pose2d(-1, 6, new Rotation2d(Math.toRadians(0))));
+    allWaypoints.add(new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))));
 
     
     Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(allWaypoints, config);
