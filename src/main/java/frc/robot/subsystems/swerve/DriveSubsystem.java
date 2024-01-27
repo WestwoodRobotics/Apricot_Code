@@ -5,6 +5,7 @@
 package frc.robot.subsystems.swerve;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 
 //import com.kauailabs.navx.frc.AHRS;
 //import com.revrobotics.CANSparkMax.IdleMode;
@@ -28,6 +29,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 public class DriveSubsystem extends SubsystemBase {
+
+  private final PIDController m_headingController = new PIDController(
+    DriveConstants.kSwerveP, DriveConstants.kSwerveI, DriveConstants.kSwerveD
+  );
+
   private Gyro gyro;
   // Create MAXSwerveModules
   private final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
@@ -160,6 +166,11 @@ public class DriveSubsystem extends SubsystemBase {
     
     double xSpeedCommanded;
     double ySpeedCommanded;
+
+    if (rot == 0) {
+      double correction = m_headingController.calculate(gyro.getZAngle());
+      rot += correction;
+    }
 
     if (rateLimit) {
       // Convert XY to polar for rate limiting

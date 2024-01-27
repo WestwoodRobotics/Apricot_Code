@@ -67,6 +67,11 @@ public final class Constants {
     public static final boolean kGyroReversed = false;
 
     public static final double slowModeMultiplier = 0.25;
+
+    public static final double kSwerveP = 0.1;
+    public static final double kSwerveI = 0;
+    public static final double kSwerveD = 0.01;
+    
   }
 
   public static final class PortConstants{
