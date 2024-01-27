@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.LED.LEDCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.swerve.driveTrajectoryAuton;
 //import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -79,6 +80,8 @@ public class RobotContainer {
   private final JoystickButton rightBumper = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
   private final JoystickButton leftBumper = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
 
+  private driveTrajectoryAuton autonCommand;
+
 
   // private final JoystickButton y2Button = new JoystickButton(m_operatorController, XboxController.Button.kY.value);
   // private final JoystickButton a2Button = new JoystickButton(m_operatorController, XboxController.Button.kA.value);
@@ -93,10 +96,12 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     DriverStation.silenceJoystickConnectionWarning(true);
+    
     // Configure default commands 
     m_robotDrive.setDefaultCommand(new driveCommand(m_robotDrive, m_driverController));
     //test.setDefaultCommand(new testCommand(test, m_driverController));
     m_led.setDefaultCommand(new LEDCommand(m_led, PortConstants.kLimitSwitchPort));
+    autonCommand = new driveTrajectoryAuton(m_robotDrive);
     // m_intakeModule.setDefaultCommand(new IntakeCommand(m_intakeModule, m_driverController, m_operatorController));
     // m_elevatorModule.setDefaultCommand(new ElevatorCommand(m_elevatorModule, m_driverController, m_operatorController));
     // m_wristModule.setDefaultCommand(new WristCommand(m_wristModule, m_driverController, m_operatorController));
@@ -118,8 +123,7 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));*/
-   new JoystickButton(m_operatorController, Button.kR1.value) // if R1 is pressed wheels should go into x formation
-        .whileTrue(new InstantCommand(
+   aButton.whileTrue(new InstantCommand(
             () -> m_robotDrive.resetGyro(),
             m_robotDrive));
 
@@ -158,46 +162,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // Create config for trajectory
-    TrajectoryConfig config = new TrajectoryConfig(
-        AutoConstants.kMaxSpeedMetersPerSecond,
-        AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-        // Add kinematics to ensure max speed is actually obeyed
-        .setKinematics(DriveConstants.kDriveKinematics);
-
-
-    // Define points directly
-    ArrayList<Pose2d> allWaypoints = new ArrayList<>();
-    allWaypoints.add(new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))));
-    allWaypoints.add(new Pose2d(1, 0, new Rotation2d(Math.toRadians(0))));
-    allWaypoints.add(new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))));
-
-    
-    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(allWaypoints, config);
-
-    var thetaController = new ProfiledPIDController(
-        AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-    thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-
-    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-        exampleTrajectory,
-        m_robotDrive::getPose, // Functional interface to feed supplier
-        DriveConstants.kDriveKinematics,
-
-        // Position controllers
-        new PIDController(AutoConstants.kPXController, 0, 0),
-        new PIDController(AutoConstants.kPYController, 0, 0),
-        thetaController,
-        m_robotDrive::setModuleStates,
-        m_robotDrive);
-
-    // Reset odometry to the starting pose of the trajectory.
-    m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
-
-
-    // Run path following command, then stop at the end.
-    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
-
+    return autonCommand;
   }
 }

@@ -32,16 +32,13 @@ public class driveCommand extends CommandBase {
   @Override
   public void execute() {
     double leftX, leftY, rightX, rightY;
+    
     if (controller.getBackButtonPressed()) {
       slowMode = !slowMode;
     }
     if (controller.getStartButton()) {
       YuMode= !YuMode;
     }
-    if (controller.getAButton()){
-      m_swerveDrive.resetGyro();
-    }
-
 
     leftX = -MathUtil.applyDeadband(controller.getLeftX(), OIConstants.kDriveDeadband);
     leftY = -MathUtil.applyDeadband(controller.getLeftY(), OIConstants.kDriveDeadband);
