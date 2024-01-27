@@ -21,7 +21,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
 // import edu.wpi.first.wpilibj.ADIS16470_IMU;
 // import edu.wpi.first.wpilibj.SPI;
-
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.utils.SwerveUtils;
@@ -30,9 +30,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
 
-  private final PIDController m_headingController = new PIDController(
-    DriveConstants.kSwerveP, DriveConstants.kSwerveI, DriveConstants.kSwerveD
-  );
+  //private final PIDController m_headingController = new PIDController(
+   // DriveConstants.kSwerveP, DriveConstants.kSwerveI, DriveConstants.kSwerveD
+ // );
 
   private Gyro gyro;
   // Create MAXSwerveModules
@@ -86,6 +86,8 @@ public class DriveSubsystem extends SubsystemBase {
           m_rearRight.getPosition()
       });
 
+  Field2d m_field;
+
  /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
     try {
@@ -99,6 +101,9 @@ public class DriveSubsystem extends SubsystemBase {
     if (gyro != null) {
       gyro.reset();
     }
+
+    m_field = new Field2d();
+    SmartDashboard.putData("Field", m_field);
   }
 
   @Override
@@ -111,10 +116,12 @@ public class DriveSubsystem extends SubsystemBase {
             m_frontRight.getPosition(),
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
-        });
-        SmartDashboard.putNumber("Z Gyro Angle", gyro.getZAngle());
-        SmartDashboard.putNumber("X Gyro Angle", gyro.getXAngle());
-        SmartDashboard.putNumber("Y Gyro Angle", gyro.getYAngle());
+        }
+    );
+    SmartDashboard.putNumber("Z Gyro Angle", gyro.getZAngle());
+    SmartDashboard.putNumber("X Gyro Angle", gyro.getXAngle());
+    SmartDashboard.putNumber("Y Gyro Angle", gyro.getYAngle());
+    m_field.setRobotPose(getPose());
   }
 
   /**
@@ -167,10 +174,10 @@ public class DriveSubsystem extends SubsystemBase {
     double xSpeedCommanded;
     double ySpeedCommanded;
 
-    if (rot == 0) {
-      double correction = m_headingController.calculate(gyro.getZAngle());
-      rot += correction;
-    }
+    // if (rot == 0) {
+    //   double correction = m_headingController.calculate(gyro.getZAngle());
+    //   rot += correction;
+    // }
 
     if (rateLimit) {
       // Convert XY to polar for rate limiting
