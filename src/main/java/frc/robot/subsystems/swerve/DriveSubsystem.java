@@ -333,6 +333,19 @@ public void TriggerDrive(double triggerValue, double leftJoystickX, double leftJ
     }
 
   }
+
+  //make a method that will get robot relative speeds. Returns the current robot-relative ChassisSpeeds. This can be calculated using one of WPILib's drive kinematics classes. No parms as input
+  public ChassisSpeeds getRobotRelativeSpeeds() {
+    return DriveConstants.kDriveKinematics.toChassisSpeeds(
+      new SwerveModuleState[] {
+        m_frontLeft.getState(),
+        m_frontRight.getState(),
+        m_rearLeft.getState(),
+        m_rearRight.getState()
+      }
+    );
+  }
+  
   public void recalibrateGyro() {
     if (gyro != null) {
       gyro.reset();
