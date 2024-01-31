@@ -50,7 +50,7 @@ public class driveTrajectoryAuton extends CommandBase {
 
     Pose2d start2 = new Pose2d(2, 0, new Rotation2d(Math.toRadians(0)));
     Pose2d end2 = new Pose2d(0, 0, new Rotation2d(Math.toRadians(0)));
-    NeoTrajectory neoTrajectory2 = new NeoTrajectory(start2, end2, -30);
+    NeoTrajectory neoTrajectory2 = new NeoTrajectory(start2, end2, 0);
     Trajectory exampleTrajectory2 = neoTrajectory2.generateTrajectory();
 
     SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(

@@ -39,15 +39,15 @@ public class Vision extends SubsystemBase
         return targetHorizontalDiffAngle.getDouble(0.0);
     }
 
-    public double getVerticalDiff(){
+    public double getVerticalDiff() {
         return targetVerticalDiffAngle.getDouble(0.0);
     }
 
-    public double getTargetArea(){
-        if (this.found()){
+    public double getTargetArea() {
+        if (this.found()) {
             return targetArea.getDouble(0.0);
         }
-        else{
+        else {
             return -1;
         }
     }
