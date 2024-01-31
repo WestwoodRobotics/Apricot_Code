@@ -7,19 +7,22 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants.*;
+import frc.robot.subsystems.swerve.DriveSubsystem;
 
 import java.util.ArrayList;
 
 public class NeoTrajectory {
+    private static Pose2d lastEnd = new Pose2d(0, 0, new Rotation2d(0));
     private Pose2d start;
     private Pose2d end;
     private double rot;
     private TrajectoryConfig config;
     private boolean isReversed;
 
-    public NeoTrajectory(Pose2d start, Pose2d end, double rot) {
-        this.start = start;
+    public NeoTrajectory(Pose2d end, double rot) {
+        this.start = lastEnd;
         this.end = end;
         this.rot = rot;
 
@@ -30,6 +33,8 @@ public class NeoTrajectory {
             AutoConstants.kMaxAccelerationMetersPerSecondSquared)
             .setKinematics(DriveConstants.kDriveKinematics)
             .setReversed(isReversed);
+
+        lastEnd = end; // Update the last end position
     }
 
     public Trajectory generateTrajectory() {
@@ -37,6 +42,23 @@ public class NeoTrajectory {
         waypoints.add(start);
         waypoints.add(end);
         return TrajectoryGenerator.generateTrajectory(waypoints, config);
+    }
+
+    public SwerveControllerCommand generateCommand(DriveSubsystem m_robotDrive) {
+        Trajectory trajectory = generateTrajectory();
+        SwerveControllerCommand command = new SwerveControllerCommand(
+            trajectory,
+            m_robotDrive::getPose,
+            DriveConstants.kDriveKinematics,
+            // Position controllers
+            new PIDController(AutoConstants.kPXController, AutoConstants.kIXController, AutoConstants.kDXController),
+            new PIDController(AutoConstants.kPYController, AutoConstants.kIYController, AutoConstants.kDYController),
+            new ProfiledPIDController(AutoConstants.kPThetaController, AutoConstants.kIThetaController, AutoConstants.kDThetaController,
+                AutoConstants.kThetaControllerConstraints),
+            m_robotDrive::setModuleStates,
+            m_robotDrive
+        );
+        return command;
     }
 
     public double getRot() {
