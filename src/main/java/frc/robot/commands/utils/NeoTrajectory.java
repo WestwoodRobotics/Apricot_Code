@@ -4,6 +4,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
@@ -14,19 +15,19 @@ import frc.robot.subsystems.swerve.DriveSubsystem;
 import java.util.ArrayList;
 
 public class NeoTrajectory {
-    private static Pose2d lastEnd = new Pose2d(0, 0, new Rotation2d(0));
-    private Pose2d start;
-    private Pose2d end;
+    private static Translation2d lastEnd = new Translation2d(0, 0);
+    private Translation2d start;
+    private Translation2d end;
     private double rot;
     private TrajectoryConfig config;
     private boolean isReversed;
 
-    public NeoTrajectory(Pose2d end, double rot) {
+    public NeoTrajectory(Translation2d end, double rot) {
         this.start = lastEnd;
         this.end = end;
         this.rot = rot;
 
-        isReversed = start.getTranslation().getX() > end.getTranslation().getX();
+        isReversed = start.getX() > end.getX();
 
         config = new TrajectoryConfig(
             AutoConstants.kMaxSpeedMetersPerSecond,
@@ -38,14 +39,21 @@ public class NeoTrajectory {
     }
 
     public Trajectory generateTrajectory() {
-        ArrayList<Pose2d> waypoints = new ArrayList<>();
+        ArrayList<Translation2d> waypoints = new ArrayList<>();
         waypoints.add(start);
         waypoints.add(end);
-        return TrajectoryGenerator.generateTrajectory(waypoints, config);
+
+        ArrayList<Pose2d> poses = new ArrayList<>();
+
+        for (Translation2d waypoint : waypoints) {
+            poses.add(new Pose2d(waypoint, new Rotation2d(0)));
+        }
+
+        return TrajectoryGenerator.generateTrajectory(poses, config);
     }
 
     public SwerveControllerCommand generateCommand(DriveSubsystem m_robotDrive) {
-        Trajectory trajectory = generateTrajectory();
+        Trajectory trajectory = this.generateTrajectory();
         SwerveControllerCommand command = new SwerveControllerCommand(
             trajectory,
             m_robotDrive::getPose,
@@ -55,6 +63,7 @@ public class NeoTrajectory {
             new PIDController(AutoConstants.kPYController, AutoConstants.kIYController, AutoConstants.kDYController),
             new ProfiledPIDController(AutoConstants.kPThetaController, AutoConstants.kIThetaController, AutoConstants.kDThetaController,
                 AutoConstants.kThetaControllerConstraints),
+            () -> new Rotation2d(Math.toRadians(this.getRot())),
             m_robotDrive::setModuleStates,
             m_robotDrive
         );

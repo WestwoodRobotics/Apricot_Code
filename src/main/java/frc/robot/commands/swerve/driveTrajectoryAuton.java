@@ -7,6 +7,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
@@ -33,25 +34,19 @@ public class driveTrajectoryAuton extends CommandBase {
   }
 
   public Command getAutonomousCommand() {
+    NeoTrajectory neoTrajectory = new NeoTrajectory(new Translation2d(2, 0), 30);
 
-    NeoTrajectory neoTrajectory = new NeoTrajectory(new Pose2d(2, 0, new Rotation2d(Math.toRadians(0))), 30);
-
-    NeoTrajectory neoTrajectory2 = new NeoTrajectory(new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))), 0);
-
-    SwerveControllerCommand swerveControllerCommand = neoTrajectory.generateCommand(m_robotDrive);
-
-    SwerveControllerCommand swerveControllerCommand2 = neoTrajectory2.generateCommand(m_robotDrive);
+    NeoTrajectory neoTrajectory2 = new NeoTrajectory(new Translation2d(0, 0), 0);
     
     // Reset odometry to the starting pose of the trajectory.
     m_robotDrive.resetOdometry(neoTrajectory.generateTrajectory().getInitialPose());
 
     // Run path following command, then stop at the end.
-    return swerveControllerCommand.andThen(
-      swerveControllerCommand2
-    ).andThen(
-      () -> m_robotDrive.drive(
-        0, 0, 0, false, false
-      )
-    );
+    return neoTrajectory.generateCommand(m_robotDrive).
+          andThen(
+           neoTrajectory2.generateCommand(m_robotDrive)
+          ).andThen(
+          () -> m_robotDrive.drive(0, 0, 0, false, false)
+          );
   }
 }
