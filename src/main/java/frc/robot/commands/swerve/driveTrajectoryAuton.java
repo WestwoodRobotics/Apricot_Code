@@ -34,9 +34,10 @@ public class driveTrajectoryAuton extends CommandBase {
   }
 
   public Command getAutonomousCommand() {
-    NeoTrajectory neoTrajectory = new NeoTrajectory(new Translation2d(2, 0), 30);
+    
+    NeoTrajectory neoTrajectory = new NeoTrajectory(2,0,30);
 
-    NeoTrajectory neoTrajectory2 = new NeoTrajectory(new Translation2d(0, 0), 0);
+    NeoTrajectory neoTrajectory2 = new NeoTrajectory(0, 0, 0);
     
     // Reset odometry to the starting pose of the trajectory.
     m_robotDrive.resetOdometry(neoTrajectory.generateTrajectory().getInitialPose());

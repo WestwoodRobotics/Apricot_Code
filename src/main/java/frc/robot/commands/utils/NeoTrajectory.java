@@ -22,9 +22,9 @@ public class NeoTrajectory {
     private TrajectoryConfig config;
     private boolean isReversed;
 
-    public NeoTrajectory(Translation2d end, double rot) {
+    public NeoTrajectory(double x, double y, double rot) {
         this.start = lastEnd;
-        this.end = end;
+        this.end = new Translation2d(x, y);
         this.rot = rot;
 
         isReversed = start.getX() > end.getX();
