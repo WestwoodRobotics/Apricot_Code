@@ -174,11 +174,6 @@ public class DriveSubsystem extends SubsystemBase {
     double xSpeedCommanded;
     double ySpeedCommanded;
 
-    // if (rot == 0) {
-    //   double correction = m_headingController.calculate(gyro.getZAngle());
-    //   rot += correction;
-    // }
-
     if (rateLimit) {
       // Convert XY to polar for rate limiting
       double inputTranslationDir = Math.atan2(ySpeed, xSpeed);

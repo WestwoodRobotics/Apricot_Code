@@ -23,6 +23,8 @@ public class driveCommand extends CommandBase {
     addRequirements(swerveDrive);
   }
 
+  // Slow mode makes the robot go slow
+  // Yu mode flips the purpose of left and right joysticks
   @Override
   public void initialize() {
     slowMode = false;
@@ -57,15 +59,11 @@ public class driveCommand extends CommandBase {
       rightX *= Constants.DriveConstants.slowModeMultiplier;
     }
 
-    // Use the trigger value for speed
-    double triggerValue = MathUtil.clamp(controller.getRightTriggerAxis(), 0, 1);
-
     if ((YuMode) && (((rightX != 0) || (rightY != 0) || (leftX != 0)))){
       m_swerveDrive.drive(rightY, rightX, leftX, true, false);
     }
     else if ((leftX != 0) || (leftY != 0) || (rightX != 0)){
       m_swerveDrive.drive(leftY, leftX, rightX, true, false);
-      //m_swerveDrive.drive(triggerValue,leftX, leftY, rightX, true, true);
     }
     else{
       m_swerveDrive.setX();

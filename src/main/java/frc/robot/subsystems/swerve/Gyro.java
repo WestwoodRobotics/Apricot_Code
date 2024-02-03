@@ -7,7 +7,6 @@ package frc.robot.subsystems.swerve;
 import edu.wpi.first.math.geometry.Rotation2d;
 
 
-import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.sensors.ADIS16470_IMU_Better;
@@ -64,6 +63,7 @@ public class Gyro extends SubsystemBase {
     gyro.reset();
   }
   
+  // TODO: Add other axis rate methods
   public double getZRate(){
     return gyro.getZAngularRate();
   }

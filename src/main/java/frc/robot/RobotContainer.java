@@ -57,6 +57,7 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   //private final Test test = new Test();
 
+  // LED for indicating robot state, not implemented in hardware.
   private final LED m_led = new LED(PortConstants.kLEDPort, PortConstants.kLEDLength);
   // private final IntakeModule m_intakeModule = new IntakeModule();
   // private final ElevatorModule m_elevatorModule = new ElevatorModule();
@@ -67,18 +68,18 @@ public class RobotContainer {
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
   
-  private final JoystickButton yButton = new JoystickButton(m_driverController, XboxController.Button.kY.value);
+  // private final JoystickButton yButton = new JoystickButton(m_driverController, XboxController.Button.kY.value);
   private final JoystickButton aButton = new JoystickButton(m_driverController, XboxController.Button.kA.value);
-  private final JoystickButton bButton = new JoystickButton(m_driverController, XboxController.Button.kB.value);
-  private final JoystickButton xButton = new JoystickButton(m_driverController, XboxController.Button.kX.value);
+  // private final JoystickButton bButton = new JoystickButton(m_driverController, XboxController.Button.kB.value);
+  // private final JoystickButton xButton = new JoystickButton(m_driverController, XboxController.Button.kX.value);
 
   // private final POVButton dPadUp = new POVButton(m_driverController, 0);
   // private final POVButton dPadRight = new POVButton(m_driverController, 90);
   // private final POVButton dPadDown = new POVButton(m_driverController, 180);
   // private final POVButton dPadLeft = new POVButton(m_driverController, 270);
 
-  private final JoystickButton rightBumper = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
-  private final JoystickButton leftBumper = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
+  // private final JoystickButton rightBumper = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
+  // private final JoystickButton leftBumper = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
 
   private driveTrajectoryAuton autonCommand;
 
@@ -123,11 +124,13 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));*/
-   aButton.whileTrue(new InstantCommand(
+   
+    // review button mapping
+    aButton.whileTrue(new InstantCommand(
             () -> m_robotDrive.resetGyro(),
             m_robotDrive));
 
-
+    // reference for future command mapping
 
     // dPadUp.whileTrue(new InstantCommand(() -> m_elevatorModule.setElevatorPower(-0.25)));
     // dPadDown.whileTrue(new InstantCommand(() -> m_elevatorModule.setElevatorPower(0.25)));

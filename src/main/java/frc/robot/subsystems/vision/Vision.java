@@ -15,6 +15,7 @@ public class Vision extends SubsystemBase
 
     public Vision()
     {
+        // Add tid (april tag id) field
         networkTable = NetworkTableInstance.getDefault().getTable("limelight");
         detected = networkTable.getEntry("tv");
         targetHorizontalDiffAngle = networkTable.getEntry("tx");
