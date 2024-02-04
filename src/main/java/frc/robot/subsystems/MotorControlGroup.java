@@ -2,20 +2,19 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkBase.*;
 
 
 import com.revrobotics.SparkPIDController.ArbFFUnits;
 
-
-
-
-
 public class MotorControlGroup {
-    private final CANSparkMax[] motors;
+
+    private final CANSparkBase[] motors;
+
 
     // Constructor that takes in an array of CANSparkMax motors
-    public MotorControlGroup(CANSparkMax... motors) {
+    public MotorControlGroup(CANSparkBase... motors) {
         this.motors = motors;
     }
 
@@ -26,7 +25,7 @@ public class MotorControlGroup {
 
     // Sets the power of all motors in the group to the given value
     public void setPower(double power) {
-        for (CANSparkMax motor : motors) {
+        for (CANSparkBase motor : motors) {
             motor.set(power);
         }
     }
@@ -34,20 +33,20 @@ public class MotorControlGroup {
 
     //Set the defaultBrakeMode of all motors in the control group
     public void setDefaultBrakeMode(boolean brakeMode){
-        for (CANSparkMax motor : motors) {
+        for (CANSparkBase motor : motors) {
             motor.setIdleMode(brakeMode ? CANSparkMax.IdleMode.kBrake : CANSparkMax.IdleMode.kCoast);
         }
     }
 
     // Sets the position of all motors in the group to the given value, with the given feedforward value
-    public void setPosition(double position, float ff) {
-        for (CANSparkMax motor : motors) {
+    public void setPosition(int position, double ff) {
+        for (CANSparkBase motor : motors) {
             motor.getPIDController().setReference(position, ControlType.kPosition, 0, ff, ArbFFUnits.kPercentOut);
         }
     }
 
     public void setInverted(boolean inverted){
-        for (CANSparkMax motor : motors) {
+        for (CANSparkBase motor : motors) {
             motor.setInverted(inverted);
         }
     }
@@ -67,7 +66,7 @@ public class MotorControlGroup {
     }
 
     public void setRampRate(double rate) {
-        for (CANSparkMax motor : motors) {
+        for (CANSparkBase motor : motors) {
             motor.setOpenLoopRampRate(rate);
             motor.setClosedLoopRampRate(rate);
         }
@@ -75,7 +74,7 @@ public class MotorControlGroup {
 
     public double getAverageTemperature() {
         double totalTemp = 0.0;
-        for (CANSparkMax motor : motors) {
+        for (CANSparkBase motor : motors) {
             totalTemp += motor.getMotorTemperature();
         }
         return totalTemp / motors.length;
@@ -83,7 +82,7 @@ public class MotorControlGroup {
 
     public double getAverageBusVoltage() {
         double totalVoltage = 0.0;
-        for (CANSparkMax motor : motors) {
+        for (CANSparkBase motor : motors) {
             totalVoltage += motor.getBusVoltage();
         }
         return totalVoltage / motors.length;
@@ -91,14 +90,14 @@ public class MotorControlGroup {
 
     public double getAverageOutputCurrent() {
         double totalCurrent = 0.0;
-        for (CANSparkMax motor : motors) {
+        for (CANSparkBase motor : motors) {
             totalCurrent += motor.getOutputCurrent();
         }
         return totalCurrent / motors.length;
     }
 
     public boolean anyFaults() {
-        for (CANSparkMax motor : motors) {
+        for (CANSparkBase motor : motors) {
             if (motor.getFaults() > 0) {
                 return true;
             }

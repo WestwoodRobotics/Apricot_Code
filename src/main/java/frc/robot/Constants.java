@@ -48,10 +48,12 @@ public final class Constants {
         new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
     // Angular offsets of the modules relative to the chassis in radians
-    public static final double kFrontLeftChassisAngularOffset = Math.PI;
-    public static final double kFrontRightChassisAngularOffset = Math.PI;
-    public static final double kRearLeftChassisAngularOffset = 0;
-    public static final double kRearRightChassisAngularOffset = Math.PI;
+    // These values are the angle offset of the wheels when the robot is facing forwards (Absolute Encoders)
+    //DO NOT CHANGE THESE VALUES UNLESS YOU KNOW WHAT YOU'RE DOING!!
+    public static final double kFrontLeftChassisAngularOffset = Math.PI + (Math.PI/2);
+    public static final double kFrontRightChassisAngularOffset = 0;
+    public static final double kRearLeftChassisAngularOffset = Math.PI;
+    public static final double kRearRightChassisAngularOffset = (Math.PI/2);
 
     // SPARK MAX CAN IDs
     public static final int kFrontLeftDrivingCanId = 11;
@@ -107,7 +109,7 @@ public final class Constants {
     public static final boolean kTurningEncoderInverted = true;
 
     // Calculations required for driving motor conversion factors and feed forward
-    public static final double kDrivingMotorFreeSpeedRps = NeoMotorConstants.kFreeSpeedRpm / 60;
+    public static final double kDrivingMotorFreeSpeedRps = VortexMotorConstants.kFreeSpeedRpm / 60;
     public static final double kWheelDiameterMeters = 0.0762;
     public static final double kWheelCircumferenceMeters = kWheelDiameterMeters * Math.PI;
     // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15 teeth on the bevel pinion
@@ -126,16 +128,19 @@ public final class Constants {
     public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
     public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
 
-    public static final double kDrivingP = 0.04; //TODO: Tune these values
-    public static final double kDrivingI = 0; //TODO: Tune these values
-    public static final double kDrivingD = 0; //TODO: Tune these values
-    public static final double kDrivingFF = 1 / kDriveWheelFreeSpeedRps; //TODO: Tune these values
+
+    // These PID Gains have been tested
+    public static final double kDrivingP = 0.1;
+    public static final double kDrivingI = 0; 
+    public static final double kDrivingD = 0.002; 
+    public static final double kDrivingFF = 1 / kDriveWheelFreeSpeedRps; 
+
     public static final double kDrivingMinOutput = -1;
     public static final double kDrivingMaxOutput = 1;
 
     public static final double kTurningP = 1;
     public static final double kTurningI = 0;
-    public static final double kTurningD = 0;
+    public static final double kTurningD = 0.2;
     public static final double kTurningFF = 0;
     public static final double kTurningMinOutput = -1;
     public static final double kTurningMaxOutput = 1;
@@ -160,32 +165,50 @@ public final class Constants {
   }
 
   public static final class AutoConstants {
+
+    //These constants need to tuned when setting up Auton Paths
     public static final double kMaxSpeedMetersPerSecond = 3;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 2;
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
-    public static final double kPXController = 1;
-    public static final double kPYController = 1;
-    public static final double kPThetaController = 1;
+
+    //These control x, y, and theta corrections when doing path following, 
+    //basically like a joystick input to correct for misalignment, 
+    //Units are m/s per meter of offset or rad/s per radian of offset
+
+    public static final double kPXController = 2;
+    public static final double kPYController = 2;
+    public static final double kPThetaController = 2;
+    
+    public static final double kIXController = 0;
+    public static final double kIYController = 0;
+    public static final double kIThetaController = 0;
+
+    public static final double kDXController = 0;
+    public static final double kDYController = 0;
+    public static final double kDThetaController = 0;
+
+
 
     // Constraint for the motion profiled robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
   }
 
-  public static final class NeoMotorConstants {
-    public static final double kFreeSpeedRpm = 5676;
+  public static final class VortexMotorConstants {
+    public static final double kFreeSpeedRpm = 6784;
   }
   public static final class ElevatorConstants {
     public static final int kElevatorMotor = 20;
-    public static double kP = 0;
-    public static double kI = 0;
-    public static double kD = 0;
 
-    public static int elev_cube_pickup = 0;
-    public static int elev_cone_pickup = 2;
-    public static int elev_outtake = 90;
+    public static double kP = 0; //TODO: Change this value
+    public static double kI = 0; //TODO: Change this value
+    public static double kD = 0; //TODO: Change this value
+    public static double ff = 0; //TODO: Change this value
+
+    public static int elevatorClimbInit = 0; //TODO: Change this value
+    public static int elevatorClimbHome = 0; //TODO: Change this value
 
     
   }
@@ -196,16 +219,13 @@ public final class Constants {
   public static final class ArmConstants{
     public static final int kArmMotor = 21;
 
-    public static double kP = 0;
-    public static double kI = 0;
-    public static double kD = 0;
+    public static double kP = 0; //TODO: Change this value
+    public static double kI = 0; //TODO: Change this value
+    public static double kD = 0; //TODO: Change this value
 
     public static int arm_cube_pickup = 70; //also arm cone high and mid cube outtake
     public static int arm_cone_pickup = 100; //also arm cone mid outtake
     public static int arm_cube_outtake = 0; //refers to high and low outtake
-
-
-
   }
 
 

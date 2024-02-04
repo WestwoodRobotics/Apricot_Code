@@ -5,6 +5,7 @@
 
 package frc.robot;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.LED.LEDCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.swerve.driveTrajectoryAuton;
 //import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -53,7 +55,9 @@ import frc.robot.subsystems.vision.LED;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  private final Test test = new Test();
+  //private final Test test = new Test();
+
+  // LED for indicating robot state, not implemented in hardware.
   private final LED m_led = new LED(PortConstants.kLEDPort, PortConstants.kLEDLength);
   // private final IntakeModule m_intakeModule = new IntakeModule();
   // private final ElevatorModule m_elevatorModule = new ElevatorModule();
@@ -64,18 +68,20 @@ public class RobotContainer {
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
   
-  private final JoystickButton yButton = new JoystickButton(m_driverController, XboxController.Button.kY.value);
+  // private final JoystickButton yButton = new JoystickButton(m_driverController, XboxController.Button.kY.value);
   private final JoystickButton aButton = new JoystickButton(m_driverController, XboxController.Button.kA.value);
-  private final JoystickButton bButton = new JoystickButton(m_driverController, XboxController.Button.kB.value);
-  private final JoystickButton xButton = new JoystickButton(m_driverController, XboxController.Button.kX.value);
+  // private final JoystickButton bButton = new JoystickButton(m_driverController, XboxController.Button.kB.value);
+  // private final JoystickButton xButton = new JoystickButton(m_driverController, XboxController.Button.kX.value);
 
   // private final POVButton dPadUp = new POVButton(m_driverController, 0);
   // private final POVButton dPadRight = new POVButton(m_driverController, 90);
   // private final POVButton dPadDown = new POVButton(m_driverController, 180);
   // private final POVButton dPadLeft = new POVButton(m_driverController, 270);
 
-  private final JoystickButton rightBumper = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
-  private final JoystickButton leftBumper = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
+  // private final JoystickButton rightBumper = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
+  // private final JoystickButton leftBumper = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
+
+  private driveTrajectoryAuton autonCommand;
 
 
   // private final JoystickButton y2Button = new JoystickButton(m_operatorController, XboxController.Button.kY.value);
@@ -91,10 +97,12 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     DriverStation.silenceJoystickConnectionWarning(true);
+    
     // Configure default commands 
     m_robotDrive.setDefaultCommand(new driveCommand(m_robotDrive, m_driverController));
-    test.setDefaultCommand(new testCommand(test, m_driverController));
+    //test.setDefaultCommand(new testCommand(test, m_driverController));
     m_led.setDefaultCommand(new LEDCommand(m_led, PortConstants.kLimitSwitchPort));
+    autonCommand = new driveTrajectoryAuton(m_robotDrive);
     // m_intakeModule.setDefaultCommand(new IntakeCommand(m_intakeModule, m_driverController, m_operatorController));
     // m_elevatorModule.setDefaultCommand(new ElevatorCommand(m_elevatorModule, m_driverController, m_operatorController));
     // m_wristModule.setDefaultCommand(new WristCommand(m_wristModule, m_driverController, m_operatorController));
@@ -116,12 +124,13 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));*/
-   new JoystickButton(m_operatorController, Button.kR1.value) // if R1 is pressed wheels should go into x formation
-        .whileTrue(new InstantCommand(
+   
+    // review button mapping
+    aButton.whileTrue(new InstantCommand(
             () -> m_robotDrive.resetGyro(),
             m_robotDrive));
 
-
+    // reference for future command mapping
 
     // dPadUp.whileTrue(new InstantCommand(() -> m_elevatorModule.setElevatorPower(-0.25)));
     // dPadDown.whileTrue(new InstantCommand(() -> m_elevatorModule.setElevatorPower(0.25)));
@@ -156,61 +165,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // Create config for trajectory
-    TrajectoryConfig config = new TrajectoryConfig(
-        AutoConstants.kMaxSpeedMetersPerSecond,
-        AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-        // Add kinematics to ensure max speed is actually obeyed
-        .setKinematics(DriveConstants.kDriveKinematics);
-
-    // Get points from Smart Dashboard
-    // Get number of waypoints from Smart Dashboard
-    int numberOfWaypoints = (int) SmartDashboard.getNumber("Number of Waypoints", 0);
-
-    // Get points from Smart Dashboard
-    List<Translation2d> interiorWaypoints = new ArrayList<>();
-    for (int i = 0; i < numberOfWaypoints; i++) {
-        double x = SmartDashboard.getNumber("Waypoint " + i + " X", 0);
-        double y = SmartDashboard.getNumber("Waypoint " + i + " Y", 0);
-        interiorWaypoints.add(new Translation2d(x, y));
-    }
-
-    // Generate trajectory
-    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-        // Start at the origin facing the +X direction
-        new Pose2d(0, 0, new Rotation2d(0.0)),
-        // Pass through the interior waypoints
-        interiorWaypoints,
-        // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(0, 0, new Rotation2d(0.01)),
-        config);
-
-
-
- 
-
-    var thetaController = new ProfiledPIDController(
-        AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-    thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-        exampleTrajectory,
-        m_robotDrive::getPose, // Functional interface to feed supplier
-        DriveConstants.kDriveKinematics,
-
-        // Position controllers
-        new PIDController(AutoConstants.kPXController, 0, 0),
-        new PIDController(AutoConstants.kPYController, 0, 0),
-        thetaController,
-        m_robotDrive::setModuleStates,
-        m_robotDrive);
-
-    // Reset odometry to the starting pose of the trajectory.
-    m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
-
-
-    // Run path following command, then stop at the end.
-    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
-
+    return autonCommand.getAutonomousCommand();
   }
 }

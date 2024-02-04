@@ -15,6 +15,7 @@ public class Vision extends SubsystemBase
 
     public Vision()
     {
+        // Add tid (april tag id) field
         networkTable = NetworkTableInstance.getDefault().getTable("limelight");
         detected = networkTable.getEntry("tv");
         targetHorizontalDiffAngle = networkTable.getEntry("tx");
@@ -39,15 +40,15 @@ public class Vision extends SubsystemBase
         return targetHorizontalDiffAngle.getDouble(0.0);
     }
 
-    public double getVerticalDiff(){
+    public double getVerticalDiff() {
         return targetVerticalDiffAngle.getDouble(0.0);
     }
 
-    public double getTargetArea(){
-        if (this.found()){
+    public double getTargetArea() {
+        if (this.found()) {
             return targetArea.getDouble(0.0);
         }
-        else{
+        else {
             return -1;
         }
     }
