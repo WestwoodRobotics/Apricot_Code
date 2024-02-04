@@ -48,6 +48,8 @@ public final class Constants {
         new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
     // Angular offsets of the modules relative to the chassis in radians
+    // These values are the angle offset of the wheels when the robot is facing forwards (Absolute Encoders)
+    //DO NOT CHANGE THESE VALUES UNLESS YOU KNOW WHAT YOU'RE DOING!!
     public static final double kFrontLeftChassisAngularOffset = Math.PI + (Math.PI/2);
     public static final double kFrontRightChassisAngularOffset = 0;
     public static final double kRearLeftChassisAngularOffset = Math.PI;
@@ -67,11 +69,6 @@ public final class Constants {
     public static final boolean kGyroReversed = false;
 
     public static final double slowModeMultiplier = 0.25;
-
-    public static final double kSwerveP = 0.1;
-    public static final double kSwerveI = 0;
-    public static final double kSwerveD = 0.01;
-    
   }
 
   public static final class PortConstants{
@@ -131,10 +128,13 @@ public final class Constants {
     public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
     public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
 
-    public static final double kDrivingP = 0.1; //TODO: Tune these values
-    public static final double kDrivingI = 0; //TODO: Tune these values
-    public static final double kDrivingD = 0.002; //TODO: Tune these values
-    public static final double kDrivingFF = 1 / kDriveWheelFreeSpeedRps; //TODO: Tune these values
+
+    // These PID Gains have been tested
+    public static final double kDrivingP = 0.1;
+    public static final double kDrivingI = 0; 
+    public static final double kDrivingD = 0.002; 
+    public static final double kDrivingFF = 1 / kDriveWheelFreeSpeedRps; 
+
     public static final double kDrivingMinOutput = -1;
     public static final double kDrivingMaxOutput = 1;
 
@@ -165,10 +165,17 @@ public final class Constants {
   }
 
   public static final class AutoConstants {
+
+    //These constants need to tuned when setting up Auton Paths
     public static final double kMaxSpeedMetersPerSecond = 3;
     public static final double kMaxAccelerationMetersPerSecondSquared = 2;
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
+
+
+    //These control x, y, and theta corrections when doing path following, 
+    //basically like a joystick input to correct for misalignment, 
+    //Units are m/s per meter of offset or rad/s per radian of offset
 
     public static final double kPXController = 2;
     public static final double kPYController = 2;
@@ -182,6 +189,8 @@ public final class Constants {
     public static final double kDYController = 0;
     public static final double kDThetaController = 0;
 
+
+
     // Constraint for the motion profiled robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
@@ -192,10 +201,11 @@ public final class Constants {
   }
   public static final class ElevatorConstants {
     public static final int kElevatorMotor = 20;
-    public static double kP = 0;
-    public static double kI = 0;
-    public static double kD = 0;
-    public static double ff = 0;
+
+    public static double kP = 0; //TODO: Change this value
+    public static double kI = 0; //TODO: Change this value
+    public static double kD = 0; //TODO: Change this value
+    public static double ff = 0; //TODO: Change this value
 
     public static int elevatorClimbInit = 0; //TODO: Change this value
     public static int elevatorClimbHome = 0; //TODO: Change this value
@@ -209,16 +219,13 @@ public final class Constants {
   public static final class ArmConstants{
     public static final int kArmMotor = 21;
 
-    public static double kP = 0;
-    public static double kI = 0;
-    public static double kD = 0;
+    public static double kP = 0; //TODO: Change this value
+    public static double kI = 0; //TODO: Change this value
+    public static double kD = 0; //TODO: Change this value
 
     public static int arm_cube_pickup = 70; //also arm cone high and mid cube outtake
     public static int arm_cone_pickup = 100; //also arm cone mid outtake
     public static int arm_cube_outtake = 0; //refers to high and low outtake
-
-
-
   }
 
 

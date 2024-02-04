@@ -34,19 +34,17 @@ public class driveTrajectoryAuton extends CommandBase {
   }
 
   public Command getAutonomousCommand() {
-    
-    NeoTrajectory neoTrajectory = new NeoTrajectory(2,0,30);
+    NeoTrajectory neoTrajectory = new NeoTrajectory();
 
-    NeoTrajectory neoTrajectory2 = new NeoTrajectory(0, 0, 0);
+    neoTrajectory.addWaypoint(2, 0, 30);
+    neoTrajectory.addWaypoint(0, 0, 0);
     
     // Reset odometry to the starting pose of the trajectory.
-    m_robotDrive.resetOdometry(neoTrajectory.generateTrajectory().getInitialPose());
+    m_robotDrive.resetOdometry(neoTrajectory.getStartingWaypointInitialPose());
 
     // Run path following command, then stop at the end.
     return neoTrajectory.generateCommand(m_robotDrive).
           andThen(
-           neoTrajectory2.generateCommand(m_robotDrive)
-          ).andThen(
           () -> m_robotDrive.drive(0, 0, 0, false, false)
           );
   }
