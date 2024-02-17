@@ -1,7 +1,7 @@
-ARG UBUNTU=22.04
-ARG TYPE=base
+FROM mcr.microsoft.com/vscode/devcontainers/base:ubuntu
 
-FROM wpilib/ubuntu-${TYPE}:${UBUNTU}
+RUN apt update -y
+RUN apt install sudo -y
 
 # Create a user named OrangeDynamite
 RUN useradd -ms /bin/bash OrangeDynamite
@@ -12,5 +12,9 @@ RUN curl -SL https://github.com/wpilibsuite/opensdk/releases/download/v2024-1/co
 USER OrangeDynamite
 WORKDIR /home/OrangeDynamite
 
+RUN wget https://github.com/wpilibsuite/allwpilib/archive/refs/tags/v2024.2.1.tar.gz -O wpilib.tar.gz
 # Change the shell prompt
 RUN echo 'PS1="OrangeDynamite@Apricot_Code:\w\$ "' >> ~/.bashrc
+RUN mkdir -p /OrangeDynamite/wpilib/2024
+RUN tar -zxvf wpilib.tar.gz -C /OrangeDynamite/wpilib/2024
+
