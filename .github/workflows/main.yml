@@ -6,7 +6,7 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: wpilib/roborio-cross-ubuntu:2023-22.04
+    container: wpilib/roborio-cross-ubuntu:2024-22.04
     steps:
       - uses: actions/checkout@v4
       - name: Grant execute permission # just in case
